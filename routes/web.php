@@ -1,7 +1,6 @@
 <?php
 
 use App\Mail\SendEmail;
-use App\Models\Organisasi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProspekController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SendEmailController;
+use App\Http\Controllers\LabelSuratController;
 use App\Http\Controllers\SelectFilterController;
 use App\Http\Controllers\TidakProspekController;
 use App\Http\Controllers\CetakProposalController;
@@ -21,6 +21,7 @@ use App\Http\Controllers\MarketingOmzetController;
 use App\Http\Controllers\MasterProposalController;
 use App\Http\Controllers\DaftarPenawaranController;
 use App\Http\Controllers\LabelSuratSirupController;
+use App\Http\Controllers\MasterOrganisasiController;
 use App\Http\Controllers\PengalamanPerusahaanController;
 
 /*
@@ -49,68 +50,71 @@ use App\Http\Controllers\PengalamanPerusahaanController;
 //     dd("Email Berhasil dikirim.");
 // });
 
+
+
 // Auth::routes();
+
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/export-dpb', [\App\Http\Controllers\DpbController::class, 'export_dpb'])->name('export-dpb');
-Route::post('/proses-export-dpb', [\App\Http\Controllers\DpbController::class, 'proses_export_dpb'])->name('proses-export-dpb');
+// Route::get('/export-dpb', [\App\Http\Controllers\DpbController::class, 'export_dpb'])->name('export-dpb');
+// Route::post('/proses-export-dpb', [\App\Http\Controllers\DpbController::class, 'proses_export_dpb'])->name('proses-export-dpb');
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::resource('/kabupaten-kota', KabupatenKotaController::class);
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Route::resource('/kabupaten-kota', KabupatenKotaController::class);
 
-Route::get('/dpb', [DpbController::class, 'index'])->name('dpb');
-Route::post('/dpb/detail-perubahan', [DpbController::class, 'detail_perubahan_dpb'])->name('detail.dpb');
+// Route::get('/dpb', [DpbController::class, 'index'])->name('dpb');
+// Route::post('/dpb/detail-perubahan', [DpbController::class, 'detail_perubahan_dpb'])->name('detail.dpb');
 
-Route::get('/tanggal', function () {
+// Route::get('/tanggal', function () {
 
-    $tanggal_dpb = "2022-12-20";
+//     $tanggal_dpb = "2022-12-20";
 
-    // add 5 days to the current time
-    $tambah_tanggal = \Carbon\Carbon::parse($tanggal_dpb)->addDays(5)->format('Y-m-d');
+//     // add 5 days to the current time
+//     $tambah_tanggal = \Carbon\Carbon::parse($tanggal_dpb)->addDays(5)->format('Y-m-d');
 
-    $period = \Carbon\CarbonPeriod::create($tanggal_dpb, $tambah_tanggal);
+//     $period = \Carbon\CarbonPeriod::create($tanggal_dpb, $tambah_tanggal);
 
-    $range = [];
-    // Iterate over the period
-    foreach ($period as $date) {
-        $range[] = $date->format('Y-m-d');
-    }
+//     $range = [];
+//     // Iterate over the period
+//     foreach ($period as $date) {
+//         $range[] = $date->format('Y-m-d');
+//     }
 
-    $sekarang = \Carbon\Carbon::now()->format('Y-m-d');
-    // dd($tambah_tanggal);
+//     $sekarang = \Carbon\Carbon::now()->format('Y-m-d');
+//     // dd($tambah_tanggal);
 
-    if (in_array($sekarang, $range)) {
-        echo 'Tanggal Ada';
-    } else {
-        echo 'Tanggal Tidak Ada';
-    }
-});
+//     if (in_array($sekarang, $range)) {
+//         echo 'Tanggal Ada';
+//     } else {
+//         echo 'Tanggal Tidak Ada';
+//     }
+// });
 
 
 
-Route::get('/nama-organisasi', function () {
-    // $dpb = DB::select("SELECT * FROM view_label_surat_organisasi LIMIT 5");
-    // dd($dpb);
+// Route::get('/nama-organisasi', function () {
+//     // $dpb = DB::select("SELECT * FROM view_label_surat_organisasi LIMIT 5");
+//     // dd($dpb);
 
-    $organisasi_id = 2792;
+//     $organisasi_id = 2792;
 
-    $data = Organisasi::where('id_branch_agency', $organisasi_id)->first();
+//     $data = Organisasi::where('id_branch_agency', $organisasi_id)->first();
 
-    // $arr_jenis = ['Pemerintah Kabupaten', 'Pemerintah Kota', 'Pemerintah Provinsi'];
-    $arr_jenis = ['Kementerian'];
+//     // $arr_jenis = ['Pemerintah Kabupaten', 'Pemerintah Kota', 'Pemerintah Provinsi'];
+//     $arr_jenis = ['Kementerian'];
 
-    $html = '';
+//     $html = '';
 
-    if (in_array($data->nama_kategori_instansi_dari_parent, $arr_jenis)) {
+//     if (in_array($data->nama_kategori_instansi_dari_parent, $arr_jenis)) {
 
-        $html .= $data->nama_organisasi_utama . ' ' . $data->nama_turunan_organisasi;
-    } else {
+//         $html .= $data->nama_organisasi_utama . ' ' . $data->nama_turunan_organisasi;
+//     } else {
 
-        $html .= $data->nama_organisasi_utama;
-    }
+//         $html .= $data->nama_organisasi_utama;
+//     }
 
-    return $html;
-});
+//     return $html;
+// });
 
 
 
@@ -231,8 +235,29 @@ Route::get('select-filter/ajax_agency_category', [SelectFilterController::class,
 Route::get('select-filter/ajax_agency', [SelectFilterController::class, 'ajax_agency']);
 Route::get('select-filter/ajax_organisasi', [SelectFilterController::class, 'ajax_organisasi']);
 Route::get('select-filter/ajax_surat_ditujukan', [SelectFilterController::class, 'ajax_surat_ditujukan']);
+Route::get('select-filter/ajax_instansi', [SelectFilterController::class, 'ajax_instansi']);
+Route::get('select-filter/ajax_kota_kabupaten', [SelectFilterController::class, 'ajax_kota_kabupaten']);
+
 
 
 //LABEL SURAT SIRUP
 Route::get('label-surat-sirup', [LabelSuratSirupController::class, 'index']);
 Route::post('label-surat-sirup/buat-label', [LabelSuratSirupController::class, 'buat_label']);
+
+
+//MASTER ORGANISASI
+Route::get('master-organisasi/form-label-pengirim', [MasterOrganisasiController::class, 'form_label_pengirim']);
+Route::get('master-organisasi/proses-label-pengirim', [MasterOrganisasiController::class, 'proses_label_pengirim']);
+Route::get('master-organisasi/form-add', [MasterOrganisasiController::class, 'form_add']);
+Route::post('master-organisasi/proses-add', [MasterOrganisasiController::class, 'proses_add']);
+Route::get('master-organisasi/{id}', [MasterOrganisasiController::class, 'index']);
+Route::get('master-organisasi/form-edit/{id}', [MasterOrganisasiController::class, 'form_edit']);
+Route::post('master-organisasi/proses-edit/{id}', [MasterOrganisasiController::class, 'proses_edit']);
+Route::post('master-organisasi/proses-add-surat-ditujukan/{id}', [MasterOrganisasiController::class, 'proses_add_surat_ditujukan']);
+Route::post('master-organisasi/delete-surat-kepada/{id}', [MasterOrganisasiController::class, 'delete_surat_kepada']);
+Route::post('master-organisasi/delete-organisasi/{id}', [MasterOrganisasiController::class, 'delete_organisasi']);
+
+
+//LABEL SURAT ORGANISASI
+Route::get('label-surat', [LabelSuratController::class, 'index']);
+Route::post('label-surat/buat-label', [LabelSuratController::class, 'buat_label']);

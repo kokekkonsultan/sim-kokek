@@ -2,10 +2,6 @@
 
 @section('style')
 <link href="{{ asset('assets/themes/metronic/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;700&family=Inter:wght@100;400;700&display=swap" rel="stylesheet" />
-
 @endsection
 
 @section('content')
@@ -14,9 +10,6 @@
     <div class="text-center bg-light-primary mb-5" style="border:2px solid #3699FF;">
         <h2 class="text-primary font-weight-bolder" style="padding: 1em">{{strtoupper($title)}}</h2>
     </div>
-
-
-
 
     <div class="card card-body mb-5">
 
@@ -80,7 +73,7 @@
 
 
     <div class="card card-body">
-        <form class="form_default" method="POST" action="{{url('label-surat-sirup/buat-label')}}" target="_blank">
+        <form class="form_default" method="POST" action="{{url('label-surat/buat-label')}}" target="_blank">
             @csrf
 
             <div class="row">
@@ -90,23 +83,19 @@
                         <span></span><b class="text-primary">Pilih Semua</b>
                     </label>
                 </div>
-                <!-- <div class="col-6 text-right">
-                    <button class="btn btn-primary font-weight-bolder tombolSubmit" type="submit"><i
-                            class="fa fa-print"></i> Generate Label Surat</button>
-                </div> -->
             </div>
 
             <hr>
 
             <div class="table-responsive">
-                <table class="table table-hover" id="table" style="font-family: 'Inter', sans-serif;">
+                <table class="table table-hover" id="table">
                     <thead class="">
                         <tr>
-                            <th class="font-weight-bolder">#</th>
-                            <th class="font-weight-bolder">Organisasi</th>
-                            <th class="font-weight-bolder">Instansi</th>
-                            <th class="font-weight-bolder">Provinsi</th>
-                            <th class="font-weight-bolder">Surat Ditujukan</th>
+                            <th class="font-weight-bold">#</th>
+                            <th class="font-weight-bold">Organisasi</th>
+                            <th class="font-weight-bold">Instansi</th>
+                            <th class="font-weight-bold">Provinsi</th>
+                            <th class="font-weight-bold">Surat Ditujukan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -118,13 +107,19 @@
             <br>
             <div class="row">
                 <div class="col-6">
-                    <!-- <a href="#" class="btn btn-dark font-weight-bolder"><i class="fa fa-arrow-left"></i> Kembali</a> -->
-                    <button class="btn btn-secondary btn-lg btn-block font-weight-bolder tombolSubmit" name="is_submit" type="submit" value="1">Generate Tanpa Nomor Telepon</button>
+                    <button class="btn btn-secondary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="1">Cetak Ukuran 60 x 40 mm Tanpa Nomor Telepon</button>
+                    <button class="btn btn-secondary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="3">Cetak Ukuran 70 x 40 mm Tanpa Nomor Telepon</button>
+                    <button class="btn btn-secondary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="5">Cetak Ukuran 70 x 50 mm Tanpa Nomor Telepon</button>
+                    <button class="btn btn-secondary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="7">Cetak Ukuran 100 x 50 mm Tanpa Nomor Telepon</button>
                 </div>
                 <div class="col-6 text-right">
-                    <button class="btn btn-primary btn-lg btn-block font-weight-bolder tombolSubmit" name="is_submit" type="submit" value="2">Generate Dengan Nomor Telepon</button>
+                    <button class="btn btn-light-primary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="2">Cetak Ukuran 60 x 40 mm Dengan Nomor Telepon</button>
+                    <button class="btn btn-light-primary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="4">Cetak Ukuran 70 x 40 mm Dengan Nomor Telepon</button>
+                    <button class="btn btn-light-primary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="6">Cetak Ukuran 70 x 50 mm Dengan Nomor Telepon</button>
+                    <button class="btn btn-light-primary btn-block font-weight-bold tombolSubmit" name="is_submit" type="submit" value="8">Cetak Ukuran 100 x 50 mm Dengan Nomor Telepon</button>
                 </div>
             </div>
+            <button class="btn btn-light-success btn-block font-weight-bold tombolSubmit mt-3" name="is_submit" type="submit" value="get_email"><i class="fa fa-envelope"></i> Get Email</button>
         </form>
     </div>
 </div>
@@ -158,7 +153,7 @@
 
 
             "ajax": {
-                "url": "{{url('label-surat-sirup')}}",
+                "url": "{{url('label-surat')}}",
                 "data": function(d) {
                     d.id_agency_category = $('select[name="id_agency_category"]').val(),
                         d.id_agency = $('select[name="id_agency"]').val(),

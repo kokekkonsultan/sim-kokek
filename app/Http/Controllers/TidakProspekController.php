@@ -90,7 +90,8 @@ class TidakProspekController extends Controller
                         $instance->where(function ($w) use ($request) {
                             $search = $request->get('search');
                             $w->orWhere('nama_pekerjaan', 'LIKE', "%$search%")
-                                ->orWhere('nama_organisasi', 'LIKE', "%$search%");
+                                ->orWhere('nama_organisasi', 'LIKE', "%$search%")
+                                ->orWhere('id_sis_rup', 'LIKE', "%$search%");
                         });
                     }
                 })

@@ -127,7 +127,8 @@ class ProspekController extends Controller
                         $instance->where(function ($w) use ($request) {
                             $search = $request->get('search');
                             $w->orWhere('nama_pekerjaan', 'LIKE', "%$search%")
-                                ->orWhere('nama_organisasi', 'LIKE', "%$search%");
+                                ->orWhere('nama_organisasi', 'LIKE', "%$search%")
+                                ->orWhere('id_sis_rup', 'LIKE', "%$search%");
                         });
                     }
                 })
@@ -443,13 +444,11 @@ class ProspekController extends Controller
                 
                 <table width="100%" border="0" cellpadding="3">
                     <tr>
-                        <td>Hormat kami,<br>PT. KOKEK<br>
+                        <td>Hormat kami,<br>KOKEK Consulting<br>
                         <img src="assets/img/kop/ttd_stamp_p_johny.png" alt="" height="80"><br><b><u>Johny Yulfan, ST, M.Si</u></b><br>Direktur
                             </td>
                         </tr>
                 </table>';
-
-                 
             $pdf->writeHTML($html, true, false, true, false, '');
 
             // var_dump($html);
