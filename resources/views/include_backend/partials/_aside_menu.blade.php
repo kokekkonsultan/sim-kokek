@@ -35,7 +35,7 @@ height:100px;">
             </li>
 
             @php
-            $menu_master = ['agency_category', 'master_instansi', 'master_organisasi', 'data_unit', 'kabupaten-kota',
+            $menu_master = ['agency_category', 'master_instansi', 'master-organisasi', 'data_unit', 'kabupaten-kota',
             'surat_ditujukan', 'contact_person', 'bidang_pekerjaan', 'jenis_proposal', 'master-proposal',
             'surat-proposal', 'kompetitor_rev', 'data_pengalaman_perusahaan', 'data_surveyor',
             'data_entry_data', 'uraian_tugas'];
@@ -105,11 +105,11 @@ height:100px;">
                         </li>
 
                         @php
-                        (Request::segment(1) == 'master_organisasi') ? $child_menu_active = 'menu-item-active' :
+                        (Request::segment(1) == 'master-organisasi') ? $child_menu_active = 'menu-item-active' :
                         $child_menu_active = '';
                         @endphp
                         <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
-                            <a href="/master_organisasi" class="menu-link">
+                            <a href="/master-organisasi/6" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                     <span></span>
                                 </i>

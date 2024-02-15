@@ -171,7 +171,7 @@ class LabelSuratSirupController extends Controller
             }
 
             //NO TELEPON
-            if($request['id_tlpn'] == 2){
+            if($request['is_submit'] == 2){
                 if($row->telepon != ''){
                     $no_tlpn = '<br/>Telp. ' . $row->telepon;
                 } else {
