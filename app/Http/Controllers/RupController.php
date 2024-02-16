@@ -496,4 +496,22 @@ class RupController extends Controller
 
         echo json_encode(array("status" => true));
     }
+
+    public function proses_export_excel($id)
+    {
+        $this->data = [];
+        $this->data['title'] = "Export Data RUP";
+        $rup = Rup::where('is_diproses_di_dil', 2)->where('is_pekerjaan_prospek', null)->get();
+
+        $content = view('rup.proses_export_excel', compact('rup'));
+        
+        $status = 200;
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="rup.xls"',
+        ];
+
+        $response = response($content, $status, $headers);
+        return $response;
+    }
 }

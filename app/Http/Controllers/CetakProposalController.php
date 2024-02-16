@@ -576,7 +576,7 @@ class CetakProposalController extends Controller
 
                 $html_ttd = '
                     <table width="100%" border="0" cellpadding="3">
-                    <tr><td>Hormat kami,<br>PT. KOKEK<br>
+                    <tr><td>Hormat kami,<br>KOKEK Consulting<br>
                     <img src="assets/img/kop/ttd_stamp_p_johny.png" alt="" height="80"><br><b><u>Johny Yulfan, ST, M.Si</u></b><br>Direktur</td></tr>
                     </table>';
                 

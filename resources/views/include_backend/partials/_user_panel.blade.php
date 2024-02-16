@@ -1,3 +1,6 @@
+@php
+$users = DB::table('users')->where('id', Session::get('id_users'))->first();
+@endphp
 
 <div id="kt_quick_user" class="offcanvas offcanvas-right p-10">
 	<!--begin::Header-->
@@ -11,12 +14,13 @@
 	<div class="offcanvas-content pr-5 mr-n5">
 		<div class="d-flex align-items-center mt-5">
 			<div class="symbol symbol-100 mr-5">
-				<div class="symbol-label" style="background-image:url('{{ asset('assets/themes/metronic/media/users/blank.png') }}')"></div>
+				<div class="symbol-label" style="background-image:url({{asset('assets/themes/metronic/media/users/blank.png')}})"></div>
 				<i class="symbol-badge bg-success"></i>
 			</div>
 			<div class="d-flex flex-column">
-				<a href="/profile" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">Lefi Andri</a>
-				<div class="text-muted mt-1">PT. KOKEK</div>
+				<a href="/profile" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $users->first_name }}
+                    {{ $users->last_name }}</a>
+				<div class="text-muted mt-1">KOKEK Consulting</div>
 				<div class="navi mt-2">
 					<a href="#" class="navi-item">
 						<span class="navi-link p-0 pb-2">
@@ -33,7 +37,7 @@
 									<!--end::Svg Icon-->
 								</span>
 							</span>
-							<span class="navi-text text-muted text-hover-primary">lefi.andri@kokek.com</span>
+							<span class="navi-text text-muted text-hover-primary">{{ $users->email }}</span>
 						</span>
 					</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" onclick="user_logout()">Logout</a>

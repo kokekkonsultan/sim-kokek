@@ -15,7 +15,7 @@ class SelectFilterController extends Controller
         if (empty($term)) {
             return response()->json([]);
         }
-        $tags = DB::table('agency_category')->where('agency_category_name', 'LIKE', "%$term%")->limit(5)->get();
+        $tags = DB::table('agency_category')->where('agency_category_name', 'LIKE', "%$term%")->get();
         $formatted_tags = [];
         foreach ($tags as $tag) {
             $formatted_tags[] = ['id' => $tag->id_agency_category, 'text' => $tag->agency_category_name];
@@ -47,7 +47,7 @@ class SelectFilterController extends Controller
         }
         $tags = DB::table('view_instansi')
             ->where('nama_organisasi_utama', 'LIKE', "%$term%")
-            ->limit(5)->get();
+            ->get();
 
         $formatted_tags = [];
         foreach ($tags as $tag) {
@@ -69,7 +69,8 @@ class SelectFilterController extends Controller
             ->where('is_organisasi', 1)
             ->where('nama_organisasi_utama', 'LIKE', "%$term%")
             ->orWhere('nama_turunan_organisasi', 'LIKE', "%$term%")
-            ->limit(5)->get();
+            ->get();
+            // ->limit(5)->get();
 
         $formatted_tags = [];
         foreach ($tags as $tag) {
@@ -88,7 +89,7 @@ class SelectFilterController extends Controller
         $tags = DB::table('surat_ditujukan')
         ->Where('nama_surat_ditujukan', 'LIKE', "%$term%")
         ->orwhere('nama_susunan_organisasi', 'LIKE', "%$term%")
-            ->limit(5)->get();
+        ->get();
 
         $formatted_tags = [];
         foreach ($tags as $tag) {
@@ -106,7 +107,7 @@ class SelectFilterController extends Controller
         }
         $tags = DB::table('view_instansi')
             ->where('nama_organisasi_utama', 'LIKE', "%$term%")
-            ->limit(5)->get();
+            ->get();
 
         $formatted_tags = [];
         foreach ($tags as $tag) {
@@ -128,7 +129,7 @@ class SelectFilterController extends Controller
             ->join('provinsi_indonesia', 'provinsi_indonesia.id_provinsi_indonesia', '=', 'kota_kab_indonesia.id_provinsi_indonesia')
             ->where('kota_kab_indonesia.nama_kota_kab_indonesia', 'LIKE', "%$term%")
             ->orWhere('provinsi_indonesia.nama_provinsi_indonesia', 'LIKE', "%$term%")
-            ->limit(5)->get();
+            ->get();
 
         $formatted_tags = [];
         foreach ($tags as $tag) {

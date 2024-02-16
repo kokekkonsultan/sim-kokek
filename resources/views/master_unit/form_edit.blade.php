@@ -28,11 +28,11 @@
             <div class="row mt-10">
                 <div class="col-md-6">
 
-                    <form method="POST" action="{{url('master-organisasi/proses-edit/' . Request::segment(3))}}">
+                    <form method="POST" action="{{url('master-unit/proses-edit/' . Request::segment(3))}}">
                         @csrf
 
                         <div class="form-group">
-                            <label class="form-label font-weight-bold">Nama Organisasi <b class="text-danger">*</b>
+                            <label class="form-label font-weight-bold">Nama Unit <b class="text-danger">*</b>
                                     </label>
                             <input name="branch_name" placeholder="Nama Organisasi" class="form-control" type="text"
                                 value="{{$current->nama_organisasi_utama}}" required>
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label font-weight-bold">Nama Instansi <b
+                            <label class="form-label font-weight-bold">Nama Organisasi <b
                                     class="text-danger">*</b></label>
                             <select id="id_suborganization_parent" name="id_suborganization_parent" class="form-control"
                                 required></select>
@@ -102,7 +102,7 @@
 
                         <div class="text-right mt-5">
                             <a class="btn btn-secondary font-weight-bold"
-                                href="{{url('master-organisasi/' . Session::get('id_users'))}}">Batal</a>
+                                href="{{url('master-unit/' . Session::get('id_users'))}}">Batal</a>
                             <button type="submit" class="btn btn-primary font-weight-bold"
                                 id="tombolSubmit">Simpan</button>
                         </div>
@@ -113,7 +113,7 @@
 
                 <div class="col-md-6" style="border-left: 1px dashed #d3d3d3;">
 
-                    <form class="form_default" method="POST" action="{{url('master-organisasi/proses-add-surat-ditujukan/' . Request::segment(3))}}">
+                    <form class="form_default" method="POST" action="{{url('master-unit/proses-add-surat-ditujukan/' . Request::segment(3))}}">
                     @csrf
                         <div class="form-group mb-3">
                             <label class="form-label font-weight-bold">Surat Ditujukan <b class="text-danger">*</b></label>
@@ -152,7 +152,7 @@
 
                         <br/>
 
-                        <a class="btn btn-light-primary shadow font-weight-bold" href="{{url('master-organisasi/' . Session::get('id_users'))}}"><i class="fas fa-check"></i> Oke</a>
+                        <a class="btn btn-light-primary shadow font-weight-bold" href="{{url('master-unit/' . Session::get('id_users'))}}"><i class="fas fa-check"></i> Oke</a>
                     
                 </div>
             </div>
@@ -195,7 +195,7 @@ $('#id_suborganization_parent').select2({
     placeholder: "Please Select",
     minimumInputLength: 2,
     ajax: {
-        url: "{{url('select-filter/ajax_instansi')}}",
+        url: "{{url('select-filter/ajax_organisasi')}}",
         dataType: 'json',
         data: function(params) {
             return {
@@ -271,7 +271,7 @@ ClassicEditor
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "{{url('master-organisasi/delete-surat-kepada')}}/" + id,
+                url: "{{url('master-unit/delete-surat-kepada')}}/" + id,
                 dataType: "JSON",
                 success: function(data) {
                     if (data.status === true) {

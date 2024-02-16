@@ -19,6 +19,7 @@
                 </div>
                 <div class="col-6">
                     <div class="text-right">
+                     <a type="button" class="btn btn-success font-weight-bold" href="{{url('prospek/export/excel/' . Request::segment(2))}}"><i class="fa fa-download"></i> Export Excel</a>
                         <a type="button" class="btn btn-dark font-weight-bold" data-toggle="collapse" href="#filter"><i class="fa fa-filter"></i> Filter Data</a>
                         <!-- <a type="button" class="btn btn-primary btn-sm font-weight-bold me-2" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah RUP</a>
                         <a type="button" class="btn btn-secondary btn-sm font-weight-bold me-2">Export Excel</a>
@@ -34,7 +35,7 @@
             <div class="collapse mb-5" id="filter">
                 <div class="card card-body shadow">
                     <div class="row">
-                        <div class="col-4">
+                        <!-- <div class="col-4">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">PIC</label>
                                 <select id='pic' class="form-control">
@@ -43,6 +44,20 @@
                                     view_rencana_umum_pengadaan
                                     WHERE pic != ''") as $row)
                                     <option value="{{$row->pic}}">{{$row->pic}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> -->
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="form-label text-info font-weight-bold">Metode</label>
+                                <select id='metode' class="form-control">
+                                    <option value="">Please Select</option>
+                                    @foreach(DB::select("SELECT DISTINCT(nama_metode_pengadaan) FROM view_rencana_umum_pengadaan
+                                    UNION
+                                    SELECT nama_metode_pengadaan FROM metode_pengadaan") as $row)
+                                    <option value="{{$row->nama_metode_pengadaan}}">{{$row->nama_metode_pengadaan}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -188,6 +203,7 @@
                         d.lokasi = $('#lokasi').val(),
                         d.is_pekerjaan_prospek = $('#is_pekerjaan_prospek').val(),
                         d.status_surat = $('#status_surat').val(),
+                        d.metode = $('#metode').val(),
                         d.search = $('input[type="search"]').val()
                         
                 }
@@ -285,6 +301,9 @@
             table.draw();
         });
         $('#status_surat').change(function() {
+            table.draw();
+        });
+        $('#metode').change(function() {
             table.draw();
         });
     });

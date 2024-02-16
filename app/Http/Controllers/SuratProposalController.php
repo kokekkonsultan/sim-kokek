@@ -391,7 +391,7 @@ class SuratProposalController extends Controller
 
             $pdf->Ln(5);
             $pdf->Cell(0, 0, 'Hormat kami,', 0, 1, 'L');
-            $pdf->Cell(0, 0, 'PT. KOKEK', 0, 1, 'L');
+            $pdf->Cell(0, 0, 'KOKEK Consulting', 0, 1, 'L');
             $pdf->Ln(20);
             $html = '<b><u>Johny Yulfan, ST, M.Si</u></b>';
             $pdf->writeHTML($html, true, false, true, false, '');
