@@ -14,7 +14,7 @@
         <div class="col-6">
             <div class="card card-body">
 
-                <h5 class="text-primary font-weight-bolder">PT. KOKEK</h5>
+                <h5 class="text-primary font-weight-bolder">KOKEK Consulting</h5>
                 <hr>
 
                 <form class="form_default" method="GET" action="{{url('master-organisasi/proses-label-pengirim')}}" target="_blank">
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label font-weight-bold">Pengirim <b class="text-danger">*</b></label>
                         <div class="col-10">
-                            <input type="text" name="pengirim" class="form-control" required="required" placeholder="PT. KOKEK" value="PT. KOKEK">
+                            <input type="text" name="pengirim" class="form-control" required="required" placeholder="KOKEK Consulting" value="KOKEK Consulting">
                         </div>
                     </div>
 

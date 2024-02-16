@@ -11,6 +11,7 @@ use App\Http\Controllers\ProspekController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\LabelSuratController;
+use App\Http\Controllers\MasterUnitController;
 use App\Http\Controllers\SelectFilterController;
 use App\Http\Controllers\TidakProspekController;
 use App\Http\Controllers\CetakProposalController;
@@ -159,6 +160,7 @@ Route::get('rup/form-edit-input/{id}', [RupController::class, 'form_edit_input']
 Route::post('rup/proses-edit-input/{id}', [RupController::class, 'proses_edit_input']);
 Route::get('rup/form-edit-import/{id}', [RupController::class, 'form_edit_import']);
 Route::post('rup/proses-edit-import/{id}', [RupController::class, 'proses_edit_import']);
+Route::get('rup/export/excel/{id}', [RupController::class, 'proses_export_excel']);
 
 //PROSPEK
 Route::get('prospek/{id}', [ProspekController::class, 'index']);
@@ -239,7 +241,6 @@ Route::get('select-filter/ajax_instansi', [SelectFilterController::class, 'ajax_
 Route::get('select-filter/ajax_kota_kabupaten', [SelectFilterController::class, 'ajax_kota_kabupaten']);
 
 
-
 //LABEL SURAT SIRUP
 Route::get('label-surat-sirup', [LabelSuratSirupController::class, 'index']);
 Route::post('label-surat-sirup/buat-label', [LabelSuratSirupController::class, 'buat_label']);
@@ -261,3 +262,13 @@ Route::post('master-organisasi/delete-organisasi/{id}', [MasterOrganisasiControl
 //LABEL SURAT ORGANISASI
 Route::get('label-surat', [LabelSuratController::class, 'index']);
 Route::post('label-surat/buat-label', [LabelSuratController::class, 'buat_label']);
+
+//MASTER UNIT
+Route::get('master-unit/form-add', [MasterUnitController::class, 'form_add']);
+Route::post('master-unit/proses-add', [MasterUnitController::class, 'proses_add']);
+Route::get('master-unit/{id}', [MasterUnitController::class, 'index']);
+Route::get('master-unit/form-edit/{id}', [MasterUnitController::class, 'form_edit']);
+Route::post('master-unit/proses-edit/{id}', [MasterUnitController::class, 'proses_edit']);
+Route::post('master-unit/proses-add-surat-ditujukan/{id}', [MasterUnitController::class, 'proses_add_surat_ditujukan']);
+Route::post('master-unit/delete-surat-kepada/{id}', [MasterUnitController::class, 'delete_surat_kepada']);
+Route::post('master-unit/delete-organisasi/{id}', [MasterUnitController::class, 'delete_organisasi']);

@@ -123,6 +123,10 @@ class ProspekController extends Controller
                         $instance->whereRaw("IF((SELECT id_rup FROM surat_sirup WHERE surat_sirup.id_rup = view_rencana_umum_pengadaan.id_rup) IS NULL, 0, 1) = " . $request->get('status_surat'));
                     }
 
+                    if ($request->get('metode') != '') {
+                        $instance->where('nama_metode_pengadaan', $request->get('metode'));
+                    }
+
                     if (!empty($request->get('search'))) {
                         $instance->where(function ($w) use ($request) {
                             $search = $request->get('search');

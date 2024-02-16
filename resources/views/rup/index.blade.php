@@ -19,8 +19,9 @@
                 </div>
                 <div class="col-6">
                     <div class="text-right">
-                        <a type="button" class="btn btn-primary font-weight-bold me-2" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah RUP</a>
+                        <a type="button" class="btn btn-success font-weight-bold" href="{{url('rup/export/excel/' . Request::segment(2))}}"><i class="fa fa-download"></i> Export Excel</a>
                         <a type="button" class="btn btn-dark font-weight-bold" data-toggle="collapse" href="#filter"><i class="fa fa-filter"></i> Filter RUP</a>
+                        <a type="button" class="btn btn-primary font-weight-bold me-2" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah RUP</a>
                         <!-- <a type="button" class="btn btn-secondary btn-sm font-weight-bold me-2">Export Excel</a> -->
                         <!-- <button class="btn btn-danger" id="btn-reset">Reset</button> -->
                     </div>
@@ -29,12 +30,10 @@
 
             <hr>
 
-
-
             <div class="collapse mb-5" id="filter">
                 <div class="card card-body">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-3">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">Pagu</label>
                                 <select id='pagu' class="form-control">
@@ -44,7 +43,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <!-- <div class="col-2">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">PIC</label>
                                 <select id='pic' class="form-control">
@@ -56,8 +55,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-2">
+                        </div> -->
+                        <div class="col-3">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">Bulan</label>
                                 <select id='bulan' class="form-control">

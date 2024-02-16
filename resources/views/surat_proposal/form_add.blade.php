@@ -313,7 +313,7 @@
             <div class="form-group row mb-5">
                 <label class="col-sm-2 col-form-label font-weight-bold">Isi Penutup Surat <b class="text-danger">*</b></label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" name="bagian_penutup_surat" id="tinymce-bagian-penutup-surat" placeholder="PT. KOKEK telah banyak bekerjasama dengan Kementerian/Lembaga, Pemerintah Daerah, Perusahaan BUMN, dan BUMD dalam rangka peningkatan sistem manajemen maupun sumber daya manusia. PT. KOKEK juga telah mendapatkan lisensi dari PECB (Kanada) untuk training standar internasional. Demikian penawaran dari kami, jika Bapak/Ibu berminat bisa menghubungi kami di marketing@kokek.com atau WhatsApp 0895 2681 4555. Atas perhatian dan kerjasamanya kami sampaikan terima kasih."></textarea>
+                    <textarea class="form-control" name="bagian_penutup_surat" id="tinymce-bagian-penutup-surat" placeholder="KOKEK Consulting telah banyak bekerjasama dengan Kementerian/Lembaga, Pemerintah Daerah, Perusahaan BUMN, dan BUMD dalam rangka peningkatan sistem manajemen maupun sumber daya manusia. KOKEK Consulting juga telah mendapatkan lisensi dari PECB (Kanada) untuk training standar internasional. Demikian penawaran dari kami, jika Bapak/Ibu berminat bisa menghubungi kami di marketing@kokek.com atau WhatsApp 0895 2681 4555. Atas perhatian dan kerjasamanya kami sampaikan terima kasih."></textarea>
                 </div>
             </div>
         </div>

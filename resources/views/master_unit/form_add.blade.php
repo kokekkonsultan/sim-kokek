@@ -22,7 +22,7 @@
     <div class="card card-custom">
         <div class="card-body">
 
-            <form class="form_default" method="POST" action="{{url('master-organisasi/proses-add')}}">
+            <form class="form_default" method="POST" action="{{url('master-unit/proses-add')}}">
                 @csrf
                 <h4 class="text-primary font-weight-bolder">{{strtoupper($title)}}</h4>
                 <hr>
@@ -30,7 +30,7 @@
                 <div class="row mt-10">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="form-label font-weight-bold">Nama Organisasi <bclass="text-danger">*</bclass=></label>
+                            <label class="form-label font-weight-bold">Nama Unit <bclass="text-danger">*</bclass=></label>
                             <input name="branch_name" placeholder="Nama Organisasi" class="form-control" type="text" required>
                             <small>(Pemerintah Daerah, Pemerintah Provinsi dan Organisasi Swasta) inputkan secara
                                 lengkap nama organisasi. <br />(Kementerian) cukup inputkan nama struktur
@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label font-weight-bold">Nama Instansi <b class="text-danger">*</b></label>
+                            <label class="form-label font-weight-bold">Nama Organisasi <b class="text-danger">*</b></label>
                             <select id="id_suborganization_parent" name="id_suborganization_parent" class="form-control" required></select>
                         </div>
 
@@ -107,7 +107,7 @@
 
                 <hr>
                 <div class="text-right">
-                    <a class="btn btn-secondary font-weight-bold" href="{{url('master-organisasi/' . Session::get('id_users'))}}">Batal</a>
+                    <a class="btn btn-secondary font-weight-bold" href="{{url('master-unit/' . Session::get('id_users'))}}">Batal</a>
                     <button type="submit" class="btn btn-primary font-weight-bold" id="tombolSubmit">Simpan</button>
                 </div>
             </form>
@@ -129,7 +129,7 @@
             placeholder: "Please Select",
             minimumInputLength: 2,
             ajax: {
-                url: "{{url('select-filter/ajax_instansi')}}",
+                url: "{{url('select-filter/ajax_organisasi')}}",
                 dataType: 'json',
                 data: function (params) {
                     return {

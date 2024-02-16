@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Elibyy\TCPDF\TCPDF;
+use App\Models\MasterUnit;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\MasterOrganisasi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class MasterOrganisasiController extends Controller
+class MasterUnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,17 +18,28 @@ class MasterOrganisasiController extends Controller
     public function index(Request $request)
     {
         $this->data = [];
-        $this->data['title'] = "Master Data Organisasi";
+        $this->data['title'] = "Master Data Unit Organisasi";
 
         Session::forget('id_users');
         Session::put('id_users', $request->segment(2));
         //var_dump(Session::get('id_users'));
 
 
-        $MasterOrganisasi = MasterOrganisasi::kode()->groupBy('id_branch_agency');
+
+        $MasterUnit = MasterUnit::kode();
         if ($request->ajax()) {
-            return Datatables::of($MasterOrganisasi)
+            return Datatables::of($MasterUnit)
                 ->addIndexColumn()
+                ->addColumn('nama_organisasi', function ($row) {
+
+                    // $nama_organisasi = '<div class="checkbox-list"><label class="checkbox"><input type="checkbox" name="id_branch_agency[]" value="' . $row->id_branch_agency . '" class="child"><span></span>' . $row->nama_organisasi_utama . '</label></div>';
+                    $nama_organisasi = $row->nama_organisasi_utama;
+                    return $nama_organisasi;
+                })
+                ->addColumn('nama_organisasi_parent', function ($row) {
+                    $nama_organisasi_parent = $row->nama_turunan_organisasi . '<br><span class="text-primary">' . $row->nama_parent_data_unit . '</span>';
+                    return $nama_organisasi_parent;
+                })
                 ->addColumn('btn_kop', function ($row) {
 
 
@@ -43,9 +53,7 @@ class MasterOrganisasiController extends Controller
                     WHERE organisasi_surat_ditujukan.id_branch_agency = $row->id_branch_agency")) as $value) {
 
                         $nama_organisasi = $value->nama_organisasi_utama != '' ? $value->nama_organisasi_utama : '';
-                        $nama_turunan_organisasi = $row->nama_turunan_organisasi != '' ? '<br/>' . $row->nama_turunan_organisasi : '';
                         $alamat_organisasi = $value->alamat_organisasi != '' ? '<br/>' .  str_replace(['<p', '</p>'], ['<span', '</span>'], $value->alamat_organisasi) : '';
-                        $nama_provinsi_indonesia = $value->nama_provinsi_indonesia != '' ? '<br/>' . str_replace('Provinsi', '', $value->nama_provinsi_indonesia) : '';
                         $no_tlpn = $value->telepon != '' ? '<br/>Telp. ' . $value->telepon : '';
 
                         //KOTA KABUPATEN
@@ -69,7 +77,7 @@ class MasterOrganisasiController extends Controller
                                                 <div style="font-size: 11px; color: #FFFFFF;">Tanpa Border</div>
                                                 <div class="box-edge">
                                                     <div class="box-no-border">
-                                                        <p><span>Kepada Yth.</span><br><b>' . $value->nama_surat_ditujukan . '<br>' . $nama_organisasi . $nama_turunan_organisasi . $alamat_organisasi . $nama_kota_kabupaten . $nama_provinsi_indonesia . $no_tlpn . '</b></p>
+                                                        <p><span>Kepada Yth.</span><br><b>' . $value->nama_surat_ditujukan . '<br>' . $nama_organisasi . $alamat_organisasi . $nama_kota_kabupaten . $no_tlpn . '</b></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,27 +105,18 @@ class MasterOrganisasiController extends Controller
                     </div>';
                     return $btn_kop;
                 })
-                ->addColumn('btn_edit', function ($row) {
+                ->addColumn('btn_action', function ($row) {
 
-                    $btn_edit = '<a class="btn btn-secondary font-weight-bold" href="/master-organisasi/form-edit/' . $row->id_branch_agency . '" title="Edit"><i class="fa fa-edit"></i> Edit</a>';
-                    return $btn_edit;
-                })
-                ->addColumn('btn_delete', function ($row) {
+                    $btn_action = '<a class="btn btn-secondary font-weight-bold mr-2" href="/master-unit/form-edit/' . $row->id_branch_agency . '" title="Edit"><i class="fa fa-edit"></i> Edit</a>
 
-                    $btn_delete = '<a class="btn btn-secondary font-weight-bold" href="javascript:void(0)" title="Hapus" onclick="delete_data(' . "'" . $row->id_branch_agency . "', '" . $row->nama_organisasi_utama . "'" . ')"><i class="fa fa-trash"></i> Delete</a>';
-                    return $btn_delete;
+                    <a class="btn btn-secondary font-weight-bold" href="javascript:void(0)" title="Hapus" onclick="delete_data(' . "'" . $row->id_branch_agency . "', '" . $row->nama_organisasi_utama . "'" . ')"><i class="fa fa-trash"></i> Delete</a>';
+                    return $btn_action;
                 })
+
                 ->filter(function ($instance) use ($request) {
-                    if ($request->get('id_agency_category') != '') {
-                        $instance->whereIn('id_kategori_instansi_dari_parent', $request->get('id_agency_category'));
-                    }
-
-                    if ($request->get('id_agency') != '') {
-                        $instance->whereIn('id_parent', $request->get('id_agency'));
-                    }
 
                     if ($request->get('id_organisasi') != '') {
-                        $instance->whereIn('id_organisasi', $request->get('id_organisasi'));
+                        $instance->whereIn('id_parent', $request->get('id_organisasi'));
                     }
 
                     if ($request->get('id_provinsi_indonesia') != '') {
@@ -136,21 +135,21 @@ class MasterOrganisasiController extends Controller
                         });
                     }
                 })
-                ->rawColumns(['btn_kop', 'btn_edit', 'btn_delete'])
+                ->rawColumns(['nama_organisasi', 'nama_organisasi_parent', 'btn_action', 'btn_kop'])
                 ->make(true);
         }
 
 
-        return view('master_organisasi.index', $this->data);
+        return view('master_unit.index', $this->data);
     }
 
 
     public function form_add()
     {
         $this->data = [];
-        $this->data['title'] = "Tambah Organisasi";
+        $this->data['title'] = "Tambah Unit Organisasi";
 
-        return view('master_organisasi.form_add', $this->data);
+        return view('master_unit.form_add', $this->data);
     }
 
     public function proses_add(Request $request)
@@ -160,7 +159,8 @@ class MasterOrganisasiController extends Controller
             'id_suborganization_parent' => $request['id_suborganization_parent'],
             'is_suborganization'        => 1,
             'is_instansi'               => null,
-            'is_organisasi'             => 1,
+            'is_organisasi'             => null,
+            'is_data_unit'              => 1,
             'address'                   => $request['address'],
             'id_kota_kab_indonesia'     => $request['id_kota_kab_indonesia'],
             'kode_pos'                  => $request['kode_pos'],
@@ -185,17 +185,17 @@ class MasterOrganisasiController extends Controller
         }
 
         Alert::success('Success', 'Berhasil Menambah Data');
-        return redirect('master-organisasi/' . Session::get('id_users'));
+        return redirect('master-unit/' . Session::get('id_users'));
     }
 
 
     public function form_edit(Request $request)
     {
         $this->data = [];
-        $this->data['title'] = "Edit Organisasi";
+        $this->data['title'] = "Edit Unit Organisasi";
         $this->data['current'] = DB::table('view_organisasi')->where('id_branch_agency', $request->segment(3))->first();
 
-        return view('master_organisasi.form_edit', $this->data);
+        return view('master_unit.form_edit', $this->data);
     }
 
     public function proses_edit(Request $request)
@@ -215,9 +215,8 @@ class MasterOrganisasiController extends Controller
         DB::table('branch_agency')->where('id_branch_agency', $request->segment(3))->update($object);
 
         Alert::success('Success', 'Berhasil Mengubah Data');
-        return redirect('master-organisasi/' . Session::get('id_users'));
+        return redirect('master-unit/' . Session::get('id_users'));
     }
-
 
     public function proses_add_surat_ditujukan(Request $request)
     {
@@ -229,7 +228,7 @@ class MasterOrganisasiController extends Controller
         DB::table("organisasi_surat_ditujukan")->insert($result);
 
         Alert::success('Success', 'Berhasil Menambah Data');
-        return redirect('master-organisasi/form-edit/' . $request->segment(3));
+        return redirect('master-unit/form-edit/' . $request->segment(3));
     }
 
 
@@ -246,63 +245,5 @@ class MasterOrganisasiController extends Controller
         DB::table('branch_agency')->where('id_branch_agency', $id)->delete();
 
         echo json_encode(array("status" => true));
-    }
-
-    public function form_label_pengirim(Request $request)
-    {
-        $this->data = [];
-        $this->data['title'] = "Data Label Pengirim";
-
-        return view('master_organisasi.form_label_pengirim', $this->data);
-    }
-
-    public function proses_label_pengirim(Request $request)
-    {
-        $pengirim = $request['pengirim'];
-        $handphone = $request['handphone'];
-        $alamat = str_replace(['<p>', '</p>'], "", $request['alamat']);
-        $jumlah = $request['jumlah'];
-        $with_border = $request['with_border'];
-
-
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        $pdf->SetCreator('HANIF');
-        $pdf->SetAuthor('HANIF');
-        $pdf->SetTitle('LABEL SURAT KEPADA');
-        $pdf->SetSubject('LABEL SURAT KEPADA');
-        $pdf->SetKeywords('LABEL SURAT KEPADA, KOP SURAT KEPADA');
-
-        $page_format = array(
-            'MediaBox' => array('llx' => 0, 'lly' => 0, 'urx' => 100, 'ury' => 50),
-        );
-
-        $pdf->SetAutoPageBreak(true, 0); // Mengaktifkan margin bottom
-        $pdf->SetMargins(2, 2, 2, true);
-
-
-        for ($i = 1; $i <= $jumlah; $i++) {
-
-            $pdf->AddPage('L', $page_format, false, false);
-
-            if ($with_border == 'true') {
-                $pdf->MultiCell(96, 46, '', 1, 'L', 0, 0, '', '', true, 0, false, true, 43, 'M');
-            } else {
-                $pdf->MultiCell(96, 46, '', 0, 'L', 0, 0, '', '', true, 0, false, true, 43, 'M');
-            }
-
-
-            $pdf->setLeftMargin(6);
-            $pdf->setRightMargin(6);
-
-            $html = '';
-            $html .= '<span style="font-size: 10px;"><b>Pengirim :</b></span><br>';
-            $html .= '<b style="font-size: 13px;">' . $pengirim . '</b><br>';
-            $html .= '<span style="font-size: 10.5px;">' . $alamat . '</span>';
-            $pdf->writeHTML($html, true, false, true, false, '');
-        }
-
-        $pdf->lastPage();
-        $pdf->Output('Label Kepada.pdf');
     }
 }
