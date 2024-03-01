@@ -3,10 +3,11 @@
 	<head><base href="">
 		<meta charset="utf-8" />
 		<title>{{ isset($title) ? $title : "KOKEK Consulting" }}</title>
-		<meta name="description" content="Survey Kelembagaan Kementerian Hukum Dan Hak Asasi Manusia." />
+		<meta name="description" content="SIM KOKEK" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="canonical" href="https://www.kokek.com" />
+		<link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}"/>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 		<link href="{{ asset('assets/themes/metronic/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/themes/metronic/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -89,7 +90,7 @@
 
 		</div>
 
-		@include('include_backend/partials/_user_panel')
+		{{-- @include('include_backend/partials/_user_panel') --}}
 		@include('include_backend/partials/_scrool_top')
 
 		<div id="kt_demo_panel" class="offcanvas offcanvas-right p-10">

@@ -21,33 +21,42 @@
                     <div class="text-right">
                      <a type="button" class="btn btn-success font-weight-bold" href="{{url('prospek/export/excel/' . Request::segment(2))}}"><i class="fa fa-download"></i> Export Excel</a>
                         <a type="button" class="btn btn-dark font-weight-bold" data-toggle="collapse" href="#filter"><i class="fa fa-filter"></i> Filter Data</a>
-                        <!-- <a type="button" class="btn btn-primary btn-sm font-weight-bold me-2" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah RUP</a>
-                        <a type="button" class="btn btn-secondary btn-sm font-weight-bold me-2">Export Excel</a>
-                        <button class="btn btn-danger" id="btn-reset">Reset</button> -->
                     </div>
                 </div>
             </div>
 
             <hr>
 
-
-
             <div class="collapse mb-5" id="filter">
                 <div class="card card-body shadow">
                     <div class="row">
-                        <!-- <div class="col-4">
+
+                        <div class="col-4">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">PIC</label>
-                                <select id='pic' class="form-control">
+                                <select id='id_user' class="form-control">
                                     <option value="">Please Select</option>
-                                    @foreach(DB::select("SELECT DISTINCT(pic) AS pic FROM
-                                    view_rencana_umum_pengadaan
-                                    WHERE pic != ''") as $row)
-                                    <option value="{{$row->pic}}">{{$row->pic}}</option>
+                                    @foreach(DB::select("SELECT * 
+                                    FROM pic_wilayah_marketing
+                                    JOIN users ON pic_wilayah_marketing.id_user = users.id
+                                    GROUP BY id_user") as $row)
+                                    <option value="{{$row->id_user}}">{{$row->first_name . ' ' . $row->last_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </div> -->
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="form-label text-info font-weight-bold">Pagu</label>
+                                <select id='pagu' class="form-control">
+                                    <option value="">Please Select</option>
+                                    <option value="ASC">Ascending (Kecil ke Besar)</option>
+                                    <option value="DESC">Descending (Besar ke Kecil)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
 
                         <div class="col-4">
                             <div class="form-group">
@@ -62,26 +71,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="form-label text-info font-weight-bold">Bulan</label>
-                                <select id='bulan' class="form-control">
-                                    <option value="">Please Select</option>
-                                    <option value="Jan">Januari</option>
-                                    <option value="Feb">Februari</option>
-                                    <option value="Maret">Maret</option>
-                                    <option value="Apr">April</option>
-                                    <option value="Mei">Mei</option>
-                                    <option value="Jun">Juni</option>
-                                    <option value="Jul">Juli</option>
-                                    <option value="Agustus">Agustus</option>
-                                    <option value="Septe">September</option>
-                                    <option value="Okt">Oktober</option>
-                                    <option value="Nov">November</option>
-                                    <option value="Des">Desember</option>
-                                </select>
-                            </div>
-                        </div>
+
+                       
+
+
                         <div class="col-4">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">Tahun</label>
@@ -93,16 +86,24 @@
                                 </select>
                             </div>
                         </div> 
+
                         <div class="col-4">
                             <div class="form-group">
-                                <label class="form-label text-info font-weight-bold">Pagu</label>
-                                <select id='pagu' class="form-control">
+                                <label class="form-label text-info font-weight-bold">K/L/PD</label>
+                                <select id='klpd' class="form-control">
                                     <option value="">Please Select</option>
-                                    <option value="ASC">Ascending (Kecil ke Besar)</option>
-                                    <option value="DESC">Descending (Besar ke Kecil)</option>
+                                    @php
+                                    $year = date('Y');
+                                    @endphp
+                                    @foreach(DB::select("SELECT DISTINCT(klpd) AS klpd FROM
+                                    view_rencana_umum_pengadaan WHERE klpd != '' && tahun_anggaran = $year") as $row)
+                                    <option value="{{$row->klpd}}">{{$row->klpd}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+                        
+
                         <div class="col-4">
                             <div class="form-group">
                                 <label class="form-label text-info font-weight-bold">Lokasi</label>
@@ -128,6 +129,47 @@
                                 </select>
                             </div>
                         </div>
+
+
+                        <!-- <div class="col-4">
+                            <div class="form-group">
+                                <label class="form-label text-info font-weight-bold">PIC</label>
+                                <select id='pic' class="form-control">
+                                    <option value="">Please Select</option>
+                                    @foreach(DB::select("SELECT DISTINCT(pic) AS pic FROM
+                                    view_rencana_umum_pengadaan
+                                    WHERE pic != ''") as $row)
+                                    <option value="{{$row->pic}}">{{$row->pic}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-4">
+                            <div class="form-group">
+                                <label class="form-label text-info font-weight-bold">Bulan</label>
+                                <select id='bulan' class="form-control">
+                                    <option value="">Please Select</option>
+                                    <option value="Jan">Januari</option>
+                                    <option value="Feb">Februari</option>
+                                    <option value="Maret">Maret</option>
+                                    <option value="Apr">April</option>
+                                    <option value="Mei">Mei</option>
+                                    <option value="Jun">Juni</option>
+                                    <option value="Jul">Juli</option>
+                                    <option value="Agustus">Agustus</option>
+                                    <option value="Septe">September</option>
+                                    <option value="Okt">Oktober</option>
+                                    <option value="Nov">November</option>
+                                    <option value="Des">Desember</option>
+                                </select>
+                            </div>
+                        </div> -->
+                       
+                        
+                        
+
+                        
                     </div>
                 </div>
             </div>
@@ -167,6 +209,10 @@
     </div>
 </div>
 
+
+<!-- <a class="btn btn-secondary font-weight-bold mr-2">Lewati</a>
+<a class="btn btn-primary font-weight-bold" href="">Lengkapi Data Pekerjaan</a> -->
+
 @endsection
 
 @section('javascript')
@@ -175,6 +221,10 @@
 @endif
 <script src="https://cdn.jsdelivr.net/gh/lefi-andri/metronic/plugins/custom/datatables/datatables.bundle.js"></script>
 <script>
+    $('#lokasi').select2({placeholder: "Please Select", width:'100%'});
+    $('#metode').select2({placeholder: "Please Select", width:'100%'});
+    $('#tahun').select2({placeholder: "Please Select", width:'100%'});
+    $('#klpd').select2({placeholder: "Please Select", width:'100%'});
     $(document).ready(function() {
         table = $('#table').DataTable({
             "scrollY": "600px",
@@ -204,7 +254,9 @@
                         d.is_pekerjaan_prospek = $('#is_pekerjaan_prospek').val(),
                         d.status_surat = $('#status_surat').val(),
                         d.metode = $('#metode').val(),
-                        d.search = $('input[type="search"]').val()
+                        d.search = $('input[type="search"]').val(),
+                        d.id_user = $('#id_user').val(),
+                        d.klpd = $('#klpd').val()
                         
                 }
             },
@@ -306,6 +358,12 @@
         $('#metode').change(function() {
             table.draw();
         });
+        $('#id_user').change(function() {
+            table.draw();
+        });
+        $('#klpd').change(function() {
+            table.draw();
+        });
     });
 
     $('#btn-reset').click(function() {
@@ -405,4 +463,71 @@
         })
     }
 </script>
+
+
+<script>
+    function jadikan_daftar_penawaran(id1, id2) {
+        Swal.fire({
+            title: 'Informasi',
+            html: "Anda akan yakin akan menambahkan pekerjaan <b>"+id2+"</b> ke Daftar Penawaran.",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.value) {
+
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: "{{url('prospek/jadikan-daftar-penawaran')}}/" + id1,
+                    dataType: "JSON",
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Memproses data',
+                            html: 'Mohon tunggu sebentar. Sistem sedang menyiapkan request anda.',
+                            allowOutsideClick: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+                    },
+                    success: function(data) {
+                        if (data.status) {
+
+                            var url = data.url;
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses',
+                                html: '<div>Silahkan lanjut dan lengkapi pengisian data pekerjaan di menu Daftar Penawaran atau klik link dibawah ini.</div>',
+                                showCancelButton: true,
+                                showConfirmButton: true,
+                                cancelButtonText: 'Lewati',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Lengkapi Data Pekerjaan',
+                                allowOutsideClick: false,
+                            }).then((object) => {
+                                if (object.value) {
+                                    window.open(url, '_blank');
+                                }
+                            });
+                            table.ajax.reload();
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error updating data!');
+                    }
+                });
+            }
+        });
+    }
+</script>
+
 @endsection 

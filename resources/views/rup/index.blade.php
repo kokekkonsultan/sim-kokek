@@ -117,8 +117,8 @@
                             <th class="font-weight-bolder">Paket</th>
                             <th class="font-weight-bolder">Pagu (Rp)</th>
                             <th class="font-weight-bolder">Jenis Pengadaan</th>
-                            <th class="font-weight-bolder">Produk Dakam Negeri</th>
-                            <th class="font-weight-bolder">Usaha Kecil/ Koperasi</th>
+                            <!-- <th class="font-weight-bolder">Produk Dakam Negeri</th>
+                            <th class="font-weight-bolder">Usaha Kecil/ Koperasi</th> -->
                             <th class="font-weight-bolder">Metode</th>
                             <th class="font-weight-bolder">Pemilihan</th>
                             <th class="font-weight-bolder">K/L/PD</th>
@@ -179,6 +179,7 @@
 @endif
 <script src="https://cdn.jsdelivr.net/gh/lefi-andri/metronic/plugins/custom/datatables/datatables.bundle.js"></script>
 <script>
+    $('#lokasi').select2({placeholder: "Please Select", width:'100%'});
     $(document).ready(function() {
         table = $('#table').DataTable({
             "scrollY": "600px",
@@ -231,13 +232,15 @@
                 }, {
                     data: 'nama_jenis_pengadaan',
                     name: 'nama_jenis_pengadaan'
-                }, {
-                    data: 'nama_jenis_produk',
-                    name: 'nama_jenis_produk'
-                }, {
-                    data: 'nama_jenis_usaha',
-                    name: 'nama_jenis_usaha'
-                }, {
+                },
+                //  {
+                //     data: 'nama_jenis_produk',
+                //     name: 'nama_jenis_produk'
+                // }, {
+                //     data: 'nama_jenis_usaha',
+                //     name: 'nama_jenis_usaha'
+                // }, 
+                {
                     data: 'nama_metode_pengadaan',
                     name: 'nama_metode_pengadaan'
                 }, {

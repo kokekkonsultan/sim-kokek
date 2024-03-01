@@ -38,9 +38,9 @@ height:100px;">
             $menu_master = ['agency_category', 'master_instansi', 'master-organisasi', 'master-unit', 'kabupaten-kota',
             'surat_ditujukan', 'contact_person', 'bidang_pekerjaan', 'jenis_proposal', 'master-proposal',
             'surat-proposal', 'kompetitor_rev', 'data_pengalaman_perusahaan', 'data_surveyor',
-            'data_entry_data', 'uraian_tugas'];
+            'data_entry_data', 'uraian_tugas', 'pic-wilayah-marketing'];
+            
             $uri_selected = Request::segment(1);
-
             $link_active = '';
             if (in_array($uri_selected, $menu_master)) {
 
@@ -155,7 +155,6 @@ height:100px;">
                                 <span class="menu-text">Surat Ditujukan</span>
                             </a>
                         </li>
-
 
                         @php
                         (Request::segment(1) == 'contact_person') ? $child_menu_active = 'menu-item-active' :
@@ -285,6 +284,19 @@ height:100px;">
                                     <span></span>
                                 </i>
                                 <span class="menu-text">Uraian Tugas</span>
+                            </a>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'pic-wilayah-marketing') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/pic-wilayah-marketing/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Data PIC Wilayah Marketing</span>
                             </a>
                         </li>
 
@@ -498,7 +510,7 @@ height:100px;">
                         $child_menu_active = '';
                         @endphp
                         <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
-                            <a href="/daftar_proyek_berjalan" class="menu-link">
+                            <a href="/dpb/6" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                     <span></span>
                                 </i>

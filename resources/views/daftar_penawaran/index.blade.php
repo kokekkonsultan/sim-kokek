@@ -18,9 +18,10 @@
                     <h4 class="text-primary font-weight-bolder">{{strtoupper($title)}}</h4>
                 </div>
                 <div class="col-6 text-right">
-                    <!-- <a class="btn btn-dark font-weight-bold" href="#"><i class="fa fa-edit"></i> Hasil Lelang</a> -->
-                    <a class="btn btn-primary font-weight-bold" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah Daftar Penawaran</a>
                     <a class="btn btn-info font-weight-bold" data-toggle="collapse" href="#filter"><i class="fa fa-filter"></i> Filter Data</a>
+                    <a class="btn btn-primary font-weight-bold" href="{{url('daftar-penawaran/form-add-tanpa-rup')}}"><i class="fa fa-plus"></i> Tambah Daftar Penawaran</a>
+
+                    <!-- <a class="btn btn-primary font-weight-bold" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i> Tambah Daftar Penawaran</a> -->
                 </div>
             </div>
 
@@ -141,13 +142,6 @@
                     </thead>
                     <tbody>
                     </tbody>
-                    <tfoot align="right">
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -156,7 +150,7 @@
 
 
 <!-- modal add -->
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,7 +178,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <!-- Modal Add Proposal -->
@@ -273,7 +267,8 @@
 
             //data pagu diambil dari sini
             "fnCreatedRow": function(row, data, index) {
-                $('td', row).eq(5).html(new Intl.NumberFormat(["ban", "id"]).format(data.nilai_pekerjaan));
+                $('td', row).eq(5).html(new Intl.NumberFormat(["ban", "id"]).format(data
+                    .nilai_pekerjaan));
                 $('td', row).eq(6).html(new Intl.NumberFormat(["ban", "id"]).format(data.nilai_hps));
             },
 
@@ -364,6 +359,50 @@
 
 
 <script>
+    function aanwizing(id) {
+        var url = "{{url('daftar-penawaran/form-jadwal-lelang')}}/" + id;
+        Swal.fire({
+            icon: 'info',
+            title: 'Informasi',
+            html: '<div>Silahkan lengkapi pengisian <b>Jadwal Aanwizing</b> di menu Jadwal Lelang terlebih dahulu sebelum melanjutkan ke tahap berikutnya.</div>',
+            showConfirmButton: true,
+            // showCancelButton: true,
+            // cancelButtonText: 'Batal',
+            // confirmButtonColor: '#3085d6',
+            // cancelButtonColor: '#d33',
+            // confirmButtonText: 'Lengkapi Jadwal',
+            // allowOutsideClick: false,
+        // })
+        // .then((object) => {
+        //     if (object.value) {
+        //         window.open(url, '_blank');
+        //     }
+        });
+    }
+
+    function lengkapi_data(id) {
+        var url = "{{url('daftar-penawaran/form-edit')}}/" + id;
+        Swal.fire({
+            icon: 'info',
+            title: 'Informasi',
+            html: '<div>Silahkan lengkapi pengisian <b>Data pekerjaan</b> di menu Edit terlebih dahulu sebelum melanjutkan ke tahap berikutnya.</div>',
+            showConfirmButton: true,
+        //     showCancelButton: true,
+        //     cancelButtonText: 'Lewati',
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Lengkapi Data Pekerjaan',
+        //     allowOutsideClick: false,
+        // }).then((object) => {
+        //     if (object.value) {
+        //         window.open(url, '_blank');
+        //     }
+        });
+    }
+</script>
+
+
+<script>
     function delete_data(id1, id2) {
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -392,7 +431,9 @@
                         }
 
                         if (data.status === false) {
-                            Swal.fire('Error', 'Tidak dapat menghapus, data Daftar Penawaran digunakan di Daftar Proyek Berjalan DPB', 'error');
+                            Swal.fire('Error',
+                                'Tidak dapat menghapus, data Daftar Penawaran digunakan di Daftar Proyek Berjalan DPB',
+                                'error');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {

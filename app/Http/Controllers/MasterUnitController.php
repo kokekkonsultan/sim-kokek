@@ -130,8 +130,9 @@ class MasterUnitController extends Controller
                     if (!empty($request->get('search'))) {
                         $instance->where(function ($w) use ($request) {
                             $search = $request->get('search');
-                            $w->orWhere('view_organisasi_slim.nama_turunan_organisasi', 'LIKE', "%$search%")
-                                ->orWhere('view_organisasi_slim.nama_organisasi_utama', 'LIKE', "%$search%");
+                            $w->orWhere('view_organisasi.nama_turunan_organisasi', 'LIKE', "%$search%")
+                                ->orWhere('view_organisasi.nama_organisasi_utama', 'LIKE', "%$search%")
+                                ->orWhere('view_organisasi.nama_parent_data_unit', 'LIKE', "%$search%");
                         });
                     }
                 })

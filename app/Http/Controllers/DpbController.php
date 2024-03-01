@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Dpb;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class DpbController extends Controller
 {
@@ -19,419 +23,143 @@ class DpbController extends Controller
         $this->data = [];
         $this->data['title'] = "Daftar Proyek Berjalan";
 
-        // $dpb = DB::table('view_dpb_marketing')->paginate(15);
-        $dpb = DB::select("
-SELECT 
-
-dpb.id_dpb AS id_dpb,
-dpb.id_dil AS id_dil,
-dpb.kode_dpb AS kode_dpb,
-
-
-
-IFNULL(
-dpb.tahun_anggaran,
-IFNULL((SELECT tahun_anggaran FROM rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-(SELECT tahun_anggaran FROM import_rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil)
-))
-
-AS tahun_dpb,
-
-
-
-
-
-IFNULL(
-
-IF((SELECT nama_jenis_pekerjaan FROM jenis_pekerjaan WHERE id_jenis_pekerjaan = dpb.id_jenis_pekerjaan) = 'Lelang', 
-
-(
-SELECT metode_pengadaan.nama_metode_pengadaan FROM rencana_umum_pengadaan 
-JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-JOIN metode_pengadaan ON metode_pengadaan.id_metode_pengadaan = rencana_umum_pengadaan.id_pemilihan_penyedia
-JOIN daftar_proyek_berjalan ON daftar_proyek_berjalan.id_dil = daftar_informasi_lelang.id_dil
-WHERE daftar_proyek_berjalan.id_dpb = dpb.id_dpb
-), 
-
-(SELECT nama_jenis_pekerjaan FROM jenis_pekerjaan WHERE id_jenis_pekerjaan = dpb.id_jenis_pekerjaan)), 
-
-
-(
-SELECT import_rencana_umum_pengadaan.nama_metode_pengadaan FROM import_rencana_umum_pengadaan
-JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-JOIN daftar_proyek_berjalan ON daftar_proyek_berjalan.id_dil = daftar_informasi_lelang.id_dil
-WHERE daftar_proyek_berjalan.id_dpb = dpb.id_dpb
-)) AS jenis_pekerjaan_dpb,
-
-
-
-IFNULL(dpb.id_bidang_pekerjaan_dpb,
-
-IFNULL((SELECT bidang_pekerjaan.id_bidang_pekerjaan FROM bidang_pekerjaan JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.id_bidang_pekerjaan = bidang_pekerjaan.id_bidang_pekerjaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-
-null)
-
-)AS id_bidang_pekerjaan,
-
-
-IFNULL((SELECT nama_bidang_pekerjaan FROM bidang_pekerjaan WHERE id_bidang_pekerjaan = dpb.id_bidang_pekerjaan_dpb),
-
-IFNULL((SELECT nama_bidang_pekerjaan FROM bidang_pekerjaan JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.id_bidang_pekerjaan = bidang_pekerjaan.id_bidang_pekerjaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-
-(SELECT nama_bidang_pekerjaan FROM import_rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil))
-)AS nama_bidang_pekerjaan,
-
-IFNULL((SELECT branch_name FROM branch_agency WHERE id_branch_agency = dpb.id_pemberi_kerja), 
-IFNULL((SELECT branch_name FROM branch_agency JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.organization = branch_agency.id_branch_agency JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-
-(SELECT nama_organisasi FROM import_rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil))
-)AS nama_pemberi_kerja,
-
-
-
-
-IFNULL(
-(SELECT branch_agency.branch_name
-FROM branch_agency
-WHERE branch_agency.id_branch_agency = (
-
-    SELECT branch_agency.id_suborganization_parent
-    FROM branch_agency
-    JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.organization = branch_agency.id_branch_agency
-    JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-    JOIN daftar_proyek_berjalan ON daftar_proyek_berjalan.id_dil = daftar_informasi_lelang.id_dil
-    WHERE daftar_informasi_lelang.id_dil = daftar_proyek_berjalan.id_dil AND daftar_proyek_berjalan.id_dpb = dpb.id_dpb
-    
-    )
-
-),
-
-null
-)AS pemberi_kerja_parent,
-
-IFNULL(
-(SELECT agency_category.agency_category_name FROM agency_category WHERE agency_category.id_agency_category = 
-    
-    (SELECT branch_agency.id_agency_category FROM branch_agency WHERE branch_agency.id_branch_agency = 
-        
-        (
-        SELECT branch_agency.id_suborganization_parent
-        FROM branch_agency
-        JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.organization = branch_agency.id_branch_agency
-        JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-        JOIN daftar_proyek_berjalan ON daftar_proyek_berjalan.id_dil = daftar_informasi_lelang.id_dil
-        WHERE daftar_informasi_lelang.id_dil = daftar_proyek_berjalan.id_dil AND daftar_proyek_berjalan.id_dpb = dpb.id_dpb
-        )))
-        
-,
-
-null
-) AS nama_kategori_instansi_dari_parent,
-
-
-IFNULL((SELECT address FROM branch_agency WHERE id_branch_agency = dpb.id_pemberi_kerja),
-IFNULL((SELECT address FROM branch_agency JOIN rencana_umum_pengadaan ON rencana_umum_pengadaan.organization = branch_agency.id_branch_agency JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-
-(SELECT alamat_organisasi FROM import_rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil))
-) AS alamat_pemberi_kerja,
-
-IFNULL(
-dpb.nama_pekerjaan,
-IFNULL((SELECT nama_pekerjaan FROM rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil),
-
-(SELECT nama_pekerjaan FROM import_rencana_umum_pengadaan JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_rup = import_rencana_umum_pengadaan.id_rup
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil))
-) AS nama_pekerjaan,
-
-dpb.nomor_kontrak AS nomor_kontrak,
-
-IFNULL(dpb.nilai_pekerjaan,
-(SELECT nilai_kontrak FROM hasil_lelang JOIN daftar_informasi_lelang ON daftar_informasi_lelang.id_dil = hasil_lelang.id_dil
-WHERE daftar_informasi_lelang.id_dil = dpb.id_dil)
-) AS nilai_kontrak,
-
-dpb.jenis_pajak AS id_jenis_pajak,
-dpb.besaran_persentase_pajak AS besaran_persentase_pajak,
-
-(SELECT
-        CASE
-                dpb.jenis_pajak 
-                WHEN '0' THEN
-                'Belum Dipilih' 
-                WHEN '1' THEN
-                'Termasuk PPN' 
-                WHEN '2' THEN
-                'Tidak Termasuk PPN' 
-                WHEN '3' THEN
-                'Tanpa PPN' ELSE dpb.jenis_pajak 
-            END) AS nama_jenis_pajak,
-
-dpb.perubahan_nilai_pekerjaan AS perubahan_nilai_kontrak,
-
-(SELECT COUNT(nomor_termin) FROM termin_pembayaran_proyek_berjalan WHERE id_dpb = dpb.id_dpb) AS jumlah_termin_pembayaran,
-
-dpb.tanggal_kontrak_diterima AS tgl_terima_kontrak,
-
--- CONCAT(DATE_FORMAT(dpb.jangka_waktu_mulai, '%d %M %Y'), ' s/d ',DATE_FORMAT(dpb.jangka_waktu_selesai, '%d %M %Y')) AS durasi_kontrak_pekerjaan,
-
-dpb.surat_referensi AS tgl_terima_surat_referensi,
-
-(SELECT DATE_FORMAT(formulir_informasi_pekerjaan.tanggal_bast, '%d %M %Y') FROM formulir_informasi_pekerjaan WHERE id_dpb = dpb.id_dpb) AS tgl_terima_bast,
-
-
-
-
-
-
-
-
-dpb.input_id AS id_pic_dpb,
-
-(SELECT CONCAT(users.first_name, ' ',users.last_name)
-FROM users
-WHERE id = dpb.pic_dpb
-) AS pic_dpb,
-
-(SELECT email
-FROM users
-WHERE id = dpb.pic_dpb
-) AS email_pic_dpb,
-
-(SELECT CONCAT(users.first_name, ' ',users.last_name)
-FROM users
-WHERE id = dpb.update_id
-) AS perubahan_terakhir_oleh,
-dpb.updated_at_revisi AS tanggal_perubahan_terakhir,
-dpb.count_publish_dpb AS jumlah_publish,
-
-datediff(dpb.jangka_waktu_selesai, dpb.jangka_waktu_mulai) AS durasi_pekerjaan,
-dpb.keterangan_dpb AS keterangan_dpb,
-
-
-
-
-
-dpb.id_ppk AS id_ppk,
-dpb.id_pptk AS id_pptk,
-dpb.id_kpa AS id_kpa,
-dpb.id_pa AS id_pa,
-dpb.id_swasta AS id_swasta,
-dpb.jangka_waktu_mulai AS jangka_waktu_mulai,
-dpb.jangka_waktu_selesai AS jangka_waktu_selesai,
-dpb.perubahan_nilai_pekerjaan AS perubahan_nilai_pekerjaan,
-dpb.jenis_pajak AS jenis_pajak,
-
-dpb.is_objek_pekerjaan_alias AS is_objek_pekerjaan_alias,
-dpb.objek_pekerjaan_alias AS objek_pekerjaan_alias,
-dpb.lokasi_pekerjaan AS lokasi_pekerjaan,
-dpb.tanggal_kontrak AS tanggal_kontrak,
-dpb.input_id AS input_id,
-dpb.created_at_revisi AS created_at,
-dpb.update_id AS update_id,
-dpb.updated_at_revisi AS updated_at,
-dpb.nilai_pekerjaan AS nilai_pekerjaan
-
-FROM daftar_proyek_berjalan dpb
-
-
-
-UNION
-
-
-
-SELECT
-'' AS id_dpb,
-'' AS id_dil,
-'' AS kode_dpb,
-
-
-tahun_anggaran AS tahun_dpb,
-'' AS jenis_pekerjaan_dpb,
-
-(SELECT id_bidang_pekerjaan FROM bidang_pekerjaan WHERE id_bidang_pekerjaan = data_pengalaman_perusahaan.id_bidang_pekerjaan) AS id_bidang_pekerjaan,
-(SELECT nama_bidang_pekerjaan FROM bidang_pekerjaan WHERE id_bidang_pekerjaan = data_pengalaman_perusahaan.id_bidang_pekerjaan) AS nama_bidang_pekerjaan,
-
-(SELECT branch_name FROM branch_agency WHERE id_branch_agency = organization) AS nama_pemberi_kerja,
-'' AS pemberi_kerja_parent,
-'' AS nama_kategori_instansi_dari_parent,
-
-(SELECT address FROM branch_agency WHERE id_branch_agency = organization) AS alamat_pemberi_kerja,
-
-nama_pekerjaan AS nama_pekerjaan,
-nomor_kontrak AS nomor_kontak,
-nilai_pekerjaan AS nilai_kontrak,
-jenis_pajak AS id_jenis_pajak,
-'' AS besaran_persentase_pajak,
-
-(SELECT
-        CASE
-                jenis_pajak 
-                WHEN '0' THEN
-                'Belum Dipilih' 
-                WHEN '1' THEN
-                'Termasuk PPN' 
-                WHEN '2' THEN
-                'Tidak Termasuk PPN' 
-                WHEN '3' THEN
-                'Tanpa PPN' ELSE jenis_pajak 
-            END) AS nama_jenis_pajak,
-            
-'' AS perubahan_nilai_kontrak,
-'' AS jumlah_termin_pembayaran,
-'' AS tgl_terima_kontrak,
--- CONCAT(DATE_FORMAT(jangka_waktu_mulai, '%d %M %Y'), ' s/d ',DATE_FORMAT(jangka_waktu_selesai, '%d %M %Y')) AS durasi_kontrak_pekerjaan,
-'' AS tgl_terima_surat_referensi,
-DATE_FORMAT(tanggal_bast, '%d %M %Y') AS tgl_terima_bast,
-
-
-
-'' AS id_pic_dpb,
-'' AS pic_dpb,
-'' AS email_pic_dpb,
-'' AS perubahan_terakhir_oleh,
-'' AS tanggal_perubahan_terakhir,
-'' AS jumlah_publish,
-'' AS durasi_pekerjaan,
-'' AS keterangan_dpb,
-
-'' AS id_ppk,
-'' AS id_pptk,
-'' AS id_kpa,
-'' AS id_pa,
-'' AS id_swasta,
-'' AS jangka_waktu_mulai,
-'' AS jangka_waktu_selesai,
-'' AS perubahan_nilai_pekerjaan,
-'' AS jenis_pajak,
-'' AS is_objek_pekerjaan_alias,
-'' AS objek_pekerjaan_alias,
-'' AS lokasi_pekerjaan,
-'' AS tanggal_kontrak,
-'' AS input_id,
-'' AS created_at,
-'' AS update_id,
-'' AS updated_at,
-'' AS nilai_pekerjaan
-
-
-FROM
-data_pengalaman_perusahaan
-            ");
-
-        // dd($dpb);
-
-        $keyword = $request->keyword;
-
-        if (strlen($keyword)) {
-            $this->data['data'] = collect($dpb)->where('tahun_dpb', $keyword);
-        } else {
-            $this->data['data'] = collect($dpb)->where('tahun_dpb', 2022);
+        Session::forget('id_users');
+        Session::put('id_users', $request->segment(2));
+        //var_dump(Session::get('id_users'));
+
+
+        // var_dump(DB::table("view_dpb3")->get());
+        $dpb = Dpb::orderBy('tahun_dpb', 'desc');
+
+        if ($request->ajax()) {
+            return Datatables::of($dpb)
+                ->addIndexColumn()
+                // ->filter(function ($instance) use ($request) {
+                //     if (!empty($request->get('search'))) {
+                //         $instance->where(function ($w) use ($request) {
+                //             $search = $request->get('search');
+                //             $w->orWhere('nama_pekerjaan', 'LIKE', "%$search%")
+                //                 ->orWhere('nama_organisasi', 'LIKE', "%$search%")
+                //                 ->orWhere('id_sis_Dpb', 'LIKE', "%$search%");
+                //         });
+                //     }
+                // })
+                ->addColumn('pemberi_kerja', function ($row) {
+
+                    // INSTANSI
+                    $teks = $row->pemberi_kerja_parent;
+                    $pecah = explode(" ", $teks);
+                    $instansi = $pecah[0] == 'Pemerintah' ? trim(preg_replace("/Pemerintah/", "", $teks)) : $teks;
+                    $nama_instansi = $row->nama_kategori_instansi_dari_parent == 'Kementerian' ?  $instansi : '';
+
+                    $data = trim($row->nama_pemberi_kerja) . ' ' . $nama_instansi . '<br><span class="text-dark">' . $row->nomor_kontrak . '</span>';
+                    return $data;
+                })
+                ->addColumn('kode', function ($row) {
+                    $kode = '<b class="text-dark" style="font-size: 16px;">' . $row->kode_dpb . '</b><br>
+                    <div class="dropdown dropdown-inline">
+                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                            <span class="svg-icon svg-icon-md">
+                                <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Communication\Reply-all.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path
+                                            d="M8.29606274,4.13760526 L1.15599693,10.6152626 C0.849219196,10.8935795 0.826147139,11.3678924 1.10446404,11.6746702 C1.11907213,11.6907721 1.13437346,11.7062312 1.15032466,11.7210037 L8.29039047,18.333467 C8.59429669,18.6149166 9.06882135,18.596712 9.35027096,18.2928057 C9.47866909,18.1541628 9.55000007,17.9721616 9.55000007,17.7831961 L9.55000007,4.69307548 C9.55000007,4.27886191 9.21421363,3.94307548 8.80000007,3.94307548 C8.61368984,3.94307548 8.43404911,4.01242035 8.29606274,4.13760526 Z"
+                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                        <path
+                                            d="M23.2951173,17.7910156 C23.2951173,16.9707031 23.4708985,13.7333984 20.9171876,11.1650391 C19.1984376,9.43652344 16.6261719,9.13671875 13.5500001,9 L13.5500001,4.69307548 C13.5500001,4.27886191 13.2142136,3.94307548 12.8000001,3.94307548 C12.6136898,3.94307548 12.4340491,4.01242035 12.2960627,4.13760526 L5.15599693,10.6152626 C4.8492192,10.8935795 4.82614714,11.3678924 5.10446404,11.6746702 C5.11907213,11.6907721 5.13437346,11.7062312 5.15032466,11.7210037 L12.2903905,18.333467 C12.5942967,18.6149166 13.0688214,18.596712 13.350271,18.2928057 C13.4786691,18.1541628 13.5500001,17.9721616 13.5500001,17.7831961 L13.5500001,13.5 C15.5031251,13.5537109 16.8943705,13.6779456 18.1583985,14.0800781 C19.9784273,14.6590944 21.3849749,16.3018455 22.3780412,19.0083314 L22.3780249,19.0083374 C22.4863904,19.3036749 22.7675498,19.5 23.0821406,19.5 L23.3000001,19.5 C23.3000001,19.0068359 23.2951173,18.2255859 23.2951173,17.7910156 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                    </g>
+                                </svg>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                            <ul class="navi flex-column navi-hover py-2">
+                                <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
+                                    Choose an action:
+                                </li>
+                                <li class="navi-item">
+                                    <a href="/dpb/detail/' . $row->id_dpb . '" class="navi-link" target="_blank">
+                                        <span class="navi-icon"><i class="la la-arrow-right"></i></span>
+                                        <span class="navi-text">Detail DPB</span>
+                                    </a>
+                                </li>
+                                <li class="navi-item">
+                                    <a href="#" class="navi-link">
+                                        <span class="navi-icon"><i class="la la-arrow-right"></i></span>
+                                        <span class="navi-text">Edit</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>';
+                    return $kode;
+                })
+                ->addColumn('nama_pekerjaan_dpb', function ($row) {
+                    $data = '<span style="color: #CB000D;" class="font-weight-bold">' . $row->nama_pekerjaan . '</span>';
+                    return $data;
+                })
+                ->addColumn('nilai_kontrak_dpb', function ($row) {
+                    $perubahan_nilai_kontrak = $row->perubahan_nilai_kontrak != '' ? '<hr>Perubahan Nilai Kontrak : <b style="color: blue; font-size: 14px;">' . number_format($row->perubahan_nilai_kontrak, 0, ",", ".") . '</b>' : '';
+
+                    $data = '<b style="color:red; font-size: 14px;">' . number_format($row->nilai_kontrak, 0, ",", ".") . '</b>' . $perubahan_nilai_kontrak;
+                    return $data;
+                })
+                ->addColumn('updated', function ($row) {
+
+                    $data = '<span class="text-success">' . date('d/m/Y H:i:s', strtotime($row->tanggal_perubahan_terakhir)) . '<br>Oleh ' . $row->perubahan_terakhir_oleh . ' </span>
+                    <br><span type="" style="cursor: pointer;" class="text-primary" data-toggle="modal" data-target="#detail_perubahan_dpb" data-placement="top" data-id="#" title="Informasi Perubahan DPB">Info Perubahan</span>';
+
+                    return $data;
+                })
+                ->rawColumns(['pemberi_kerja', 'kode', 'nama_pekerjaan_dpb', 'nilai_kontrak_dpb', 'updated'])
+                ->make(true);
         }
+
 
         return view('dpb.index', $this->data);
     }
 
-    public function detail_perubahan_dpb(Request $request)
-    {
-        $id =  $_POST['rowid'];
 
-        $this->data = array();
-
-        $this->data['riwayat_dpb'] = DB::table('data_perubahan_dpb')->where('id_dpb', $id)->get();
-
-        return view('dpb/detail_perubahan_dpb', $this->data);        
-    }
-
-    
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function export_dpb()
+    public function detail($id)
     {
         $this->data = [];
-        $this->data['title'] = "Export DPB";
-        $users = DB::table('data_prospek')->get();
-        dd($users);
-        // return view('dpb.form_export_dpb', $this->data);
+        $this->data['id'] = $id;
+        $this->data['title'] = "Detail Proyek Berjalan";
+        $this->data['data'] = collect(DB::select("SELECT * FROM view_dpb_marketing WHERE id_dpb = $id"))->first();
+        
+
+        // #PEMBERI KERJA
+        // $teks = $this->data['data']->pemberi_kerja_parent;
+        // $pecah = explode(" ", $teks);
+        // $instansi = $pecah[0] == 'Pemerintah' ? trim(preg_replace("/Pemerintah/", "", $teks)) : $teks;
+        // $nama_instansi = $this->data['data']->nama_kategori_instansi_dari_parent == 'Kementerian' ?  $instansi : '';
+        // $this->data['pemberi_kerja'] = trim($this->data['data']->nama_pemberi_kerja) . ' ' . $nama_instansi;
+        
+        $this->data['ppk'] = DB::table('contact_person')->where('id_contact_person', $this->data['data']->id_ppk)->first();
+        $this->data['pptk'] = DB::table('contact_person')->where('id_contact_person', $this->data['data']->id_pptk)->first();
+        $this->data['kpa'] = DB::table('contact_person')->where('id_contact_person', $this->data['data']->id_kpa)->first();
+        $this->data['pa'] = DB::table('contact_person')->where('id_contact_person', $this->data['data']->id_pa)->first();
+
+        return view('dpb.detail', $this->data);
     }
 
-    public function proses_export_dpb(Request $request)
-    {
-        // print_r($request);
-        echo $request->tahun_anggaran;
-    }
+
+
+    // public function export_dpb()
+    // {
+    //     $this->data = [];
+    //     $this->data['title'] = "Export DPB";
+    //     $users = DB::table('data_prospek')->get();
+    //     dd($users);
+    //     // return view('dpb.form_export_dpb', $this->data);
+    // }
+
+    // public function proses_export_dpb(Request $request)
+    // {
+    //     // print_r($request);
+    //     echo $request->tahun_anggaran;
+    // }
 }

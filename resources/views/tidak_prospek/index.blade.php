@@ -58,36 +58,6 @@
         </div>
     </div>
 </div>
-
-
-<!-- modal add -->
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Pilih cara anda menambahkan RUP</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card-deck">
-                    <a href="{{url('rup/form-add/' . Request::segment(2))}}" class="card card-body btn btn-outline-primary shadow">
-                        <div class="text-center font-weight-bold">
-                            <i class="fas fa-edit"></i><br>Tambah RUP Dengan Input
-                        </div>
-                    </a>
-
-                    <a href="{{url('rup/form-import/' . Request::segment(2))}}" class="card card-body btn btn-outline-primary shadow">
-                        <div class="text-center font-weight-bold">
-                            <i class="fa fa-upload"></i><br>Tambah RUP Dengan Import Data Excel
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('javascript')

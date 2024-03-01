@@ -150,7 +150,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5" hidden>
                     <label class="col-sm-3 col-form-label font-weight-bold">Pokja</label>
                     <div class="col-sm-9">
                         <select class="form-control" name="pokja" id="pokja">
@@ -183,7 +183,7 @@
                 </div>
 
 
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5" hidden>
                     <label class="col-sm-3 col-form-label font-weight-bold">Keterangan Lelang</label>
                     <div class="col-sm-9">
                         <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
