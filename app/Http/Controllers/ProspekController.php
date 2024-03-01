@@ -62,10 +62,17 @@ class ProspekController extends Controller
                                 <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                     Choose an action:
                                 </li>
+                               
                                 <li class="navi-item">
                                     <a ' . $url_surat_sirup . ' class="navi-link">
                                         <span class="navi-icon"><i class="la la-arrow-right"></i></span>
                                         <span class="navi-text">Surat Sirup</span>
+                                    </a>
+                                </li>
+                                <li class="navi-item">
+                                    <a href="javascript:void(0)" class="navi-link" onclick="jadikan_daftar_penawaran(' . "'" . $row->id_rup . "', '" . $row->nama_pekerjaan . "'" . ')">
+                                        <span class="navi-icon"><i class="la la-arrow-right"></i></span>
+                                        <span class="navi-text">Jadikan Daftar Penawaran</span>
                                     </a>
                                 </li>
                                 <li class="navi-item">
@@ -127,6 +134,21 @@ class ProspekController extends Controller
                         $instance->where('nama_metode_pengadaan', $request->get('metode'));
                     }
 
+                    if ($request->get('klpd') != '') {
+                        $instance->where('klpd', $request->get('klpd'));
+                    }
+
+                    if ($request->get('id_user') != '') {
+
+                        // $data = DB::table('users')->where('id', $request->get('id_user'))->first();
+
+                        $arr = [];
+                        foreach(DB::table('pic_wilayah_marketing')->where('id_user', $request->get('id_user'))->get() as $value){
+                            $arr[] = $value->nama_wilayah;
+                        }
+                        $instance->whereIn('klpd', $arr);
+                    }
+
                     if (!empty($request->get('search'))) {
                         $instance->where(function ($w) use ($request) {
                             $search = $request->get('search');
@@ -140,6 +162,7 @@ class ProspekController extends Controller
                 ->make(true);
         }
 
+        
 
         return view('prospek.index', $this->data);
     }
@@ -459,5 +482,37 @@ class ProspekController extends Controller
 
         $pdf->lastPage();
         $pdf->Output('Surat Sirup.pdf', 'I');
+    }
+
+
+    public function jadikan_daftar_penawaran(Request $request, $id)
+    {
+        $object = [
+            'id_kategori_dil'               => 1,
+            'id_rup'                        => $id,
+            'input_id'                      => Session::get('id_users'),
+            'created_at'                    => now(),
+        ];
+        DB::table("daftar_informasi_lelang")->insert($object);
+        $insert_id = DB::getPdo()->lastInsertId();
+
+
+        // # INSERT TAHAP LELANG
+        // $id_metode_kualifikasi = 7; #Prakualifikasi
+        // foreach (DB::table('data_tahapan_lelang')->where('id_metode_kualifikasi', $id_metode_kualifikasi)->get() as $row) {
+        //     DB::select("INSERT INTO tahap_lelang (id_dil, id_data_tahapan_lelang)
+        //     VALUES ($insert_id, $row->id_data_tahapan_lelang)");
+        // }
+
+        # HASIL LELANG 
+        $value = [
+            'id_dil'            => $insert_id,
+            'status_lelang'     => 7,
+        ];
+        DB::table("hasil_lelang")->insert($value);
+
+
+        $url = url('daftar-penawaran/form-edit/' . $insert_id);
+        echo json_encode(array("status" => true, 'url' => $url));
     }
 }

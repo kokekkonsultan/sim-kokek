@@ -24,6 +24,7 @@ use App\Http\Controllers\DaftarPenawaranController;
 use App\Http\Controllers\LabelSuratSirupController;
 use App\Http\Controllers\MasterOrganisasiController;
 use App\Http\Controllers\PengalamanPerusahaanController;
+use App\Http\Controllers\PicWilayahMarketingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -174,6 +175,7 @@ Route::get('prospek/export/excel/{id}', [ProspekController::class, 'proses_expor
 Route::get('prospek/form-surat/{id}', [ProspekController::class, 'form_surat']);
 Route::post('prospek/generate-surat/{id}', [ProspekController::class, 'generate_surat']);
 Route::get('prospek/pdf/{id}', [ProspekController::class, 'pdf']);
+Route::post('prospek/jadikan-daftar-penawaran/{id}', [ProspekController::class, 'jadikan_daftar_penawaran']);
 
 
 //TIDAK PROSPEK
@@ -199,6 +201,10 @@ Route::post('daftar-penawaran/ubah-jadwal-lelang/{id}', [DaftarPenawaranControll
 Route::post('daftar-penawaran/ubah-jadwal-lelang/{id}', [DaftarPenawaranController::class, 'ubah_jadwal_lelang']);
 Route::get('daftar-penawaran/publish/{id}', [DaftarPenawaranController::class, 'publish']);
 Route::post('daftar-penawaran/add-proposal', [DaftarPenawaranController::class, 'add_proposal']);
+Route::get('daftar-penawaran/form-aanwizing/{id}', [DaftarPenawaranController::class, 'form_aanwizing']);
+Route::post('daftar-penawaran/publish-aanwizing/{id}', [DaftarPenawaranController::class, 'publish_aanwizing']);
+Route::get('daftar-penawaran/form-sanggahan/{id}', [DaftarPenawaranController::class, 'form_sanggahan']);
+
 
 
 //SURAT PROPOSAL
@@ -272,3 +278,19 @@ Route::post('master-unit/proses-edit/{id}', [MasterUnitController::class, 'prose
 Route::post('master-unit/proses-add-surat-ditujukan/{id}', [MasterUnitController::class, 'proses_add_surat_ditujukan']);
 Route::post('master-unit/delete-surat-kepada/{id}', [MasterUnitController::class, 'delete_surat_kepada']);
 Route::post('master-unit/delete-organisasi/{id}', [MasterUnitController::class, 'delete_organisasi']);
+
+
+//PIC WILAYAH MARKETING
+Route::post('pic-wilayah-marketing/delete-wilayah/{id}', [PicWilayahMarketingController::class, 'delete_wilayah']);
+Route::post('pic-wilayah-marketing/edit-wilayah/{id}', [PicWilayahMarketingController::class, 'edit_wilayah']);
+Route::post('pic-wilayah-marketing/add-wilayah/{id}', [PicWilayahMarketingController::class, 'add_wilayah']);
+Route::post('pic-wilayah-marketing/delete-data/{id}', [PicWilayahMarketingController::class, 'delete_data']);
+Route::post('pic-wilayah-marketing/proses-edit/{id}', [PicWilayahMarketingController::class, 'proses_edit']);
+Route::get('pic-wilayah-marketing/form-edit/{id}', [PicWilayahMarketingController::class, 'form_edit']);
+Route::post('pic-wilayah-marketing/proses-add', [PicWilayahMarketingController::class, 'proses_add']);
+Route::get('pic-wilayah-marketing/form-add', [PicWilayahMarketingController::class, 'form_add']);
+Route::get('pic-wilayah-marketing/{id}', [PicWilayahMarketingController::class, 'index']);
+
+//DPB
+Route::get('dpb/{id}', [DpbController::class, 'index']);
+Route::get('dpb/detail/{id}', [DpbController::class, 'detail']);

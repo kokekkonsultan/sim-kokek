@@ -31,12 +31,30 @@ class DaftarPenawaranController extends Controller
 
         // $this->data['data_rup'] = collect(Rup::get()->where('tahun_anggaran', '2023'));
         // date('Y')
-        $dafpen = DaftarPenawaran::query();
+        $DaftarPenawaran = DaftarPenawaran::orderBy('nilai_hps', 'asc')->orderBy('id_dil', 'desc');
 
         if ($request->ajax()) {
-            return Datatables::of($dafpen)
+            return Datatables::of($DaftarPenawaran)
                 ->addIndexColumn()
                 ->addColumn('paket', function ($row) {
+
+
+                    #cek jadwal Penjelasan Dokumen Prakualifikasi sudah terisi apa belum
+                    $jadwal_aanwizing = DB::table('tahap_lelang')->where('id_dil', $row->id_dil)->where('id_data_tahapan_lelang', 4);
+
+                    #cek data pekerjaan sudah lengkap atau belum
+                    if ($jadwal_aanwizing->count() > 0) {
+
+                        if ($jadwal_aanwizing->first()->waktu_mulai_tahap_lelang != '' || $jadwal_aanwizing->first()->waktu_sampai_tahap_lelang != '') {
+                            $link_aanwizing = 'href="/daftar-penawaran/form-aanwizing/' . $row->id_dil . '"';
+                        } else {
+                            $link_aanwizing = 'href="javascript:void(0)" onclick="aanwizing(' . $row->id_dil . ')"';
+                        }
+                    } else {
+                        $link_aanwizing = 'href="javascript:void(0)" onclick="lengkapi_data(' . $row->id_dil . ')"';
+                    }
+
+                    $link_hasil_lelang = $row->nilai_hps != '' ? 'href="/daftar-penawaran/form-hasil-lelang/' . $row->id_dil . '"' : 'href="javascript:void(0)" onclick="lengkapi_data(' . $row->id_dil . ')"';
 
                     $paket = '<b class="text-danger">' . $row->nama_pekerjaan . '</b><br>
                     <div class="dropdown dropdown-inline">
@@ -70,9 +88,23 @@ class DaftarPenawaranController extends Controller
                                 </li>
 
                                 <li class="navi-item">
-                                    <a href="/daftar-penawaran/form-hasil-lelang/' . $row->id_dil . '" class="navi-link">
+                                    <a ' . $link_aanwizing . ' class="navi-link">
+                                        <span class="navi-icon"><i class="la la-arrow-right"></i></span>
+                                        <span class="navi-text">Aanwizing</span>
+                                    </a>
+                                </li>
+
+                                <li class="navi-item">
+                                    <a ' . $link_hasil_lelang . ' class="navi-link">
                                         <span class="navi-icon"><i class="la la-arrow-right"></i></span>
                                         <span class="navi-text">Ubah/Publish Hasil DIL</span>
+                                    </a>
+                                </li>
+
+                                <li class="navi-item">
+                                    <a href="/daftar-penawaran/form-sanggahan/' . $row->id_dil . '" class="navi-link">
+                                        <span class="navi-icon"><i class="la la-arrow-right"></i></span>
+                                        <span class="navi-text">Sanggahan</span>
                                     </a>
                                 </li>
 
@@ -111,9 +143,9 @@ class DaftarPenawaranController extends Controller
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('tahun') != '') {
-                        $instance->where('pembebanan_tahun_anggaran', $request->get('tahun'));
+                        $instance->where('tahun_anggaran', $request->get('tahun'));
                     } else {
-                        $instance->where('pembebanan_tahun_anggaran', date('Y'));
+                        $instance->where('tahun_anggaran', date('Y'));
                     }
 
                     if ($request->get('status_lelang') != '') {
@@ -310,7 +342,7 @@ class DaftarPenawaranController extends Controller
     {
         $dil = DaftarPenawaran::where('id_dil', $request->segment(3))->first();
 
-        # Cek data DIL dari RUP import atau tidak
+        # Cek data DIL dari RUP atau tidak
         if ($dil->is_import == 0) {
             $object_rup = array(
                 'organization'          => $request['id_branch_agency'],
@@ -324,9 +356,20 @@ class DaftarPenawaranController extends Controller
             DB::table('rencana_umum_pengadaan')->where('id_rup', $dil->id_rup)->update($object_rup);
         }
 
+
+        #jika pindahan dari prospek
+        $id_metode_kualifikasi = $request['id_metode_kualifikasi'];
+        if ($dil->id_metode_kualifikasi == '' && $id_metode_kualifikasi != '') {
+
+            foreach (DB::table('data_tahapan_lelang')->where('id_metode_kualifikasi', $id_metode_kualifikasi)->get() as $row) {
+                DB::select("INSERT INTO tahap_lelang (id_dil, id_data_tahapan_lelang) VALUES ($dil->id_dil, $row->id_data_tahapan_lelang)");
+            }
+        }
+
+
         $object_dil = [
             'pembebanan_tahun_anggaran'     => $request['pembebanan_tahun_anggaran'],
-            'id_metode_kualifikasi'         => $request['id_metode_kualifikasi'],
+            'id_metode_kualifikasi'         => $id_metode_kualifikasi,
             'id_metode_dokumen'             => $request['id_metode_dokumen'],
             'id_metode_evaluasi'            => $request['id_metode_evaluasi'],
             'nilai_hps'                     => str_replace([".", ","], '', $request['nilai_hps']),
@@ -335,7 +378,6 @@ class DaftarPenawaranController extends Controller
             'pic_dil'                       => $request['pic'],
             'id_pokja'                      => $request['pokja']
         ];
-        
         DB::table('daftar_informasi_lelang')->where('id_dil', $dil->id_dil)->update($object_dil);
 
         Alert::success('Success', 'Berhasil Mengubah Data DIL');
@@ -479,10 +521,10 @@ class DaftarPenawaranController extends Controller
         $this->data['status'] = $this->status_lelang($this->data['dil']);
 
 
-        Mail::send('daftar_penawaran.form_email', $this->data, function($message) use($dil) {
+        Mail::send('daftar_penawaran.form_email', $this->data, function ($message) use ($dil) {
             $message->from('sim@kokek.com', 'SIM PT.KOKEK')
-                    ->to('programmer@kokek.com')
-                    ->subject('Hasil Lelang ' . $dil->nama_pekerjaan);  
+                ->to('programmer@kokek.com')
+                ->subject('Hasil Lelang ' . $dil->nama_pekerjaan);
         });
 
         // ->to('programmer@kokek.com')->cc('lefi.andri@kokek.com')
@@ -553,5 +595,62 @@ class DaftarPenawaranController extends Controller
         // var_dump($object);
 
         return redirect('surat-proposal/form-add/' . $request['id_jenis_proposal'] . '/' . $insert_id);
+    }
+
+
+    public function form_aanwizing(Request $request)
+    {
+        $this->data = [];
+        $this->data['title'] = "Aanwizing";
+        $this->data['users'] = DB::table('users')->where('id', Session::get('id_users'))->first();
+        $this->data['dil'] = DaftarPenawaran::where('id_dil', $request->segment(3))->first();
+        $dil = $this->data['dil'];
+        $this->data['hasil_lelang'] = DB::table('hasil_lelang')->where('id_dil', $request->segment(3))->first();
+        $this->data['status'] = $this->status_lelang($dil);
+
+        return view('daftar_penawaran.aanwizing', $this->data);
+    }
+
+
+    public function publish_aanwizing(Request $request)
+    {
+        $id_dil = $request->segment(3);
+
+        $object = [
+            'jenis_kontrak'         => $request['jenis_kontrak'],
+            'nilai_batas_evaluasi'  => $request['nilai_batas_evaluasi'],
+            'bobot_teknis'          => $request['bobot_teknis'],
+            'bobot_biaya'           => $request['bobot_biaya'],
+            'uraian_aanwizing'      => $request['uraian_aanwizing'],
+            'is_publish_aanwizing'  => 1
+        ];
+        DB::table('daftar_informasi_lelang')->where('id_dil', $id_dil)->update($object);
+
+        $dil = DB::table('data_dil_marketing')->where('id_dil', $id_dil)->first();
+        $this->data['dil'] = $dil;
+
+        Mail::send('daftar_penawaran.aanwizing_email', $this->data, function ($message) use ($dil) {
+            $message->from('sim@kokek.com', 'SIM PT.KOKEK')
+                ->to('programmer@kokek.com')
+                ->subject('Aanwizing ' . $dil->nama_pekerjaan);
+        });
+
+        return response()->json();
+
+        // return view('daftar_penawaran.aanwizing_email', $this->data);
+    }
+
+
+    public function form_sanggahan(Request $request)
+    {
+        $this->data = [];
+        $this->data['title'] = "Form Sanggahan";
+        $this->data['users'] = DB::table('users')->where('id', Session::get('id_users'))->first();
+        $this->data['dil'] = DaftarPenawaran::where('id_dil', $request->segment(3))->first();
+        $dil = $this->data['dil'];
+        $this->data['hasil_lelang'] = DB::table('hasil_lelang')->where('id_dil', $request->segment(3))->first();
+        $this->data['status'] = $this->status_lelang($dil);
+
+        return view('daftar_penawaran.form_sanggahan', $this->data);
     }
 }

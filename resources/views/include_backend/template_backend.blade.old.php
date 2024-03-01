@@ -69,7 +69,7 @@
 
 				</div>
 				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-					@include('include_backend/partials/_header')
+				{{-- @include('include_backend/partials/_header') --}}
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 						{{-- @include('include_backend/partials/_subheader') --}}
 
@@ -89,7 +89,7 @@
 			
 		</div>
 		
-		@include('include_backend/partials/_user_panel')
+		{{-- @include('include_backend/partials/_user_panel') --}}
 		@include('include_backend/partials/_scrool_top')
 
 		<div id="kt_demo_panel" class="offcanvas offcanvas-right p-10">			

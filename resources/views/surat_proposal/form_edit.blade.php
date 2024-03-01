@@ -167,7 +167,7 @@
                 <div class="form-group row">
                     <label for="catatan" class="col-sm-2 col-form-label font-weight-bold">Catatan</label>
                     <div class="col-sm-10">
-                        <textarea name="catatan" cols="40" rows="10" data="catatan" class="form-control form-control-sm">{{$proposal->catatan}}</textarea>
+                        <textarea name="catatan" cols="40" rows="10" id="catatan" class="form-control form-control-sm">{{$proposal->catatan}}</textarea>
                         <small id="" class="form-text text-muted">Jika diisi akan ditampilkan pada kolom catatan proposal.</small>
                     </div>
                 </div>
@@ -386,6 +386,14 @@
 
             tinymce.init({
                 selector: '#tinymce-bagian-penutup-surat',
+                menubar: false,
+                statusbar: false,
+                branding: false,
+                toolbar: ['undo redo | cut copy paste | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | code'],
+                plugins: 'advlist autolink link image lists charmap print preview code'
+            });
+            tinymce.init({
+                selector: '#catatan',
                 menubar: false,
                 statusbar: false,
                 branding: false,

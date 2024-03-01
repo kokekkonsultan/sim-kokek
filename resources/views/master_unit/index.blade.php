@@ -117,7 +117,7 @@
                             <th width="35%">Nama Organisasi</th>
                             <th>Email</th>
                             <th></th>
-                            <th width="15%"></th>
+                            <th width="16%"></th>
                         </tr>
                     </thead>
                     <tbody>

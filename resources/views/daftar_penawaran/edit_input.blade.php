@@ -208,7 +208,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5" hidden>
                     <label class="col-sm-3 col-form-label font-weight-bold">Pokja</label>
                     <div class="col-sm-9">
                         <select class="form-control" name="pokja" id="pokja">
@@ -247,14 +247,14 @@
                             @endforeach
                         </select>
                         @else
-                        <input type="text" class="form-control" name="pic" value="{{$dil->pic_dil}}" hidden>
+                        <input type="text" class="form-control" name="pic" value="{{$users->id}}" hidden>
                         <input type="text" class="form-control" value="{{$users->first_name . ' ' . $users->last_name}}" disabled>
                         @endif
                     </div>
                 </div>
 
 
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5" hidden>
                     <label class="col-sm-3 col-form-label font-weight-bold">Keterangan Lelang</label>
                     <div class="col-sm-9">
                         <textarea class="form-control" name="keterangan" id="keterangan">{{$dil->keterangan_lelang}}</textarea>
