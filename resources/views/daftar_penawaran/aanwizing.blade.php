@@ -139,7 +139,7 @@
             <div class="text-center">
                 <a class="btn btn-secondary btn-lg font-weight-bolder tombolCancel" href="{{url('daftar-penawaran/' . Session::get('id_users'))}}"><i class="fa fa-arrow-left"></i>Kembali</a>
 
-                <button type="submit" onclick="return confirm('Apakah anda yakin ingin menghapus data survei ?')" class="btn btn-success btn-lg font-weight-bolder tombolSubmit"><i class="fa fa-share"></i> Publish Aanwizing</button>
+                <button type="submit" onclick="return confirm('Apakah anda yakin ingin mempublish data aanwizing ?')" class="btn btn-success btn-lg font-weight-bolder tombolSubmit"><i class="fa fa-share"></i> Publish Aanwizing</button>
             </div>
 
         </form>

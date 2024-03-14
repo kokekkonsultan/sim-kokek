@@ -104,7 +104,7 @@ class SuratProposalController extends Controller
         $object = [
             'id_master_proposal'                => $request['id_proposal'],
             'nama_proposal_template'            => 'Surat Proposal ' . $get_produk->nama_master_proposal,
-            'nama_kegiatan'                     => $get_produk->nama_master_proposal,
+            // 'nama_kegiatan'                     => $get_produk->nama_master_proposal,
             'jumlah_lampiran'                   => $request['jumlah_lampiran'],
             'perihal'                           => $request['perihal'],
             'id_bidang_pekerjaan'               => $get_produk->id_bidang_pekerjaan,
@@ -118,10 +118,12 @@ class SuratProposalController extends Controller
 
         #Project
         if ($request->segment(3) == 2) {
-            $object['bagian_tubuh_surat'] = $request['bagian_tubuh_surat'];
+            $object['nama_kegiatan']        = $get_produk->nama_master_proposal;
+            $object['bagian_tubuh_surat']   = $request['bagian_tubuh_surat'];
 
             #Public Course
         } elseif ($request->segment(3) == 3) {
+            $object['nama_kegiatan']    = $request['nama_kegiatan'];
             $object['tgl_mulai']        = $request['tgl_mulai'];
             $object['tgl_selesai']      = $request['tgl_selesai'];
             $object['jam_mulai']        = $request['jam_mulai'];
@@ -134,6 +136,7 @@ class SuratProposalController extends Controller
 
             #In House Training
         } elseif ($request->segment(3) == 4) {
+            $object['nama_kegiatan']            = $request['nama_kegiatan'];
             $object['jumlah_hari']              = $request['jumlah_hari'];
             $object['jam_mulai']                = $request['jam_mulai'];
             $object['jam_selesai']              = $request['jam_selesai'];
@@ -148,7 +151,8 @@ class SuratProposalController extends Controller
 
             #Custom
         } else {
-            $object['bagian_tubuh_surat'] = $request['bagian_tubuh_surat'];
+            $object['nama_kegiatan']        = $get_produk->nama_master_proposal;
+            $object['bagian_tubuh_surat']   = $request['bagian_tubuh_surat'];
         }
 
         DB::table("proposal_template")->insert($object);
@@ -172,16 +176,16 @@ class SuratProposalController extends Controller
 
     public function proses_edit(Request $request)
     {
-        $get_produk = DB::table('view_master_proposal')->where('id', $request['id_proposal'])->first();
+        // $get_produk = DB::table('view_master_proposal')->where('id', $request['id_proposal'])->first();
         $proposal = DB::table('view_proposal_template')->where('id_proposal_template', $request->segment(3))->first();
 
         $object = [
             'id_master_proposal'                => $request['id_proposal'],
-            'nama_proposal_template'            => 'Surat Proposal ' . $get_produk->nama_master_proposal,
-            'nama_kegiatan'                     => $get_produk->nama_master_proposal,
+            // 'nama_proposal_template'            => 'Surat Proposal ' . $get_produk->nama_master_proposal,
+            // 'nama_kegiatan'                     => $get_produk->nama_master_proposal,
             'jumlah_lampiran'                   => $request['jumlah_lampiran'],
             'perihal'                           => $request['perihal'],
-            'id_bidang_pekerjaan'               => $get_produk->id_bidang_pekerjaan,
+            // 'id_bidang_pekerjaan'               => $get_produk->id_bidang_pekerjaan,
             'id_jenis_instansi_proposal'        => $request['id_jenis_instansi_proposal'],
             'bagian_pembuka_surat'              => $request['bagian_pembuka_surat'],
             'bagian_penutup_surat'              => $request['bagian_penutup_surat'],
@@ -194,6 +198,7 @@ class SuratProposalController extends Controller
 
             #Public Course
         } elseif ($proposal->nama_jenis_proposal == 'Public Course') {
+            $object['nama_kegiatan']    = $request['nama_kegiatan'];
             $object['tgl_mulai']        = $request['tgl_mulai'];
             $object['tgl_selesai']      = $request['tgl_selesai'];
             $object['jam_mulai']        = $request['jam_mulai'];
@@ -206,6 +211,7 @@ class SuratProposalController extends Controller
 
             #In House Training
         } elseif ($proposal->nama_jenis_proposal == 'In House Training') {
+            $object['nama_kegiatan']            = $request['nama_kegiatan'];
             $object['jumlah_hari']              = $request['jumlah_hari'];
             $object['jam_mulai']                = $request['jam_mulai'];
             $object['jam_selesai']              = $request['jam_selesai'];
@@ -377,7 +383,7 @@ class SuratProposalController extends Controller
                 <tr>
                     <td width="19%">Nama Kegiatan</td>
                     <td width="2%"><div align="center">:</div></td>
-                    <td width="79%">' . $data->nama_master_proposal . '</td>
+                    <td width="79%">' . $data->nama_kegiatan . '</td>
                 </tr>
                 <tr>
                     <td>Waktu</td>

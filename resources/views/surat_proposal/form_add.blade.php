@@ -114,6 +114,14 @@
             <!-- #Public Course -->
             @elseif(Request::Segment(3) == 3)
             <div>
+
+                <div class="form-group row mb-5">
+                    <label class="col-sm-2 col-form-label font-weight-bold">Nama Kegiatan <b class="text-danger">*</b></label>
+                    <div class="col-sm-10 input-group">
+                        <input type="text" class="form-control" name="nama_kegiatan" placeholder="Pelatihan Survei Kepuasan Masyarakat Elektronik" required>
+                    </div>
+                </div>
+
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label font-weight-bold">Tanggal <b class="text-danger">*</b></label>
                     <div class="col-sm-10">
@@ -188,6 +196,14 @@
             <!-- #In House Training -->
             @elseif(Request::Segment(3) == 4)
             <div>
+
+                <div class="form-group row mb-5">
+                    <label class="col-sm-2 col-form-label font-weight-bold">Nama Kegiatan <b class="text-danger">*</b></label>
+                    <div class="col-sm-10 input-group">
+                        <input type="text" class="form-control" name="nama_kegiatan" placeholder="Pelatihan Survei Kepuasan Masyarakat Elektronik" required>
+                    </div>
+                </div>
+
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label font-weight-bold">Jumlah Hari Kegiatan <b class="text-danger">*</b></label>
                     <div class="col-sm-10">
@@ -327,7 +343,8 @@
             <div class="form-group row mb-5">
                 <label class="col-sm-2 col-form-label font-weight-bold">Ukuran Font <b class="text-danger">*</b></label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" name="font_size" placeholder="Masukkan ukuran font untuk template surat." required>
+                    <input type="number" class="form-control" max="11" min="6" name="font_size" step="0.1" placeholder="Masukkan ukuran font untuk template surat." required>
+                    <small class="text-danger">** Gunakan titik (.) untuk menggantikan koma (,) jika font yang anda masukkan berbentuk desimal</small>
                 </div>
             </div>
         </div>

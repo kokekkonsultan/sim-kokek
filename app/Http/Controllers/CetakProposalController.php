@@ -503,7 +503,55 @@ class CetakProposalController extends Controller
 
                 #Public Course || In House Training
             } elseif ($data->nama_jenis_proposal == 'Public Course' || $data->nama_jenis_proposal == 'In House Training') {
-                $waktu = $data->nama_jenis_proposal == 'Public Course' ? date('d-m-Y', strtotime($data->tgl_mulai)) . ' s/d ' . date('d-m-Y', strtotime($data->tgl_selesai)) : $data->jumlah_hari;
+
+                $tahun_start = date('Y', strtotime($data->tgl_mulai));
+                $tahun_end = date('Y', strtotime($data->tgl_selesai));
+                $bulan_start = date('m', strtotime($data->tgl_mulai));
+                $bulan_end = date('m', strtotime($data->tgl_selesai));
+                $tanggal_start = date('d', strtotime($data->tgl_mulai));
+                $tanggal_end = date('d', strtotime($data->tgl_selesai));
+
+                if($tahun_start == $tahun_end){
+                    $tahun = $tahun_start;
+
+                    #cek bulan
+                    if($bulan_start == $bulan_end){
+                        $arr_bulan = [
+                            '00' => '-',
+                            '01' => 'Januari',
+                            '02' => 'Februari',
+                            '03' => 'Maret',
+                            '04' => 'April',
+                            '05' => 'Mei',
+                            '06' => 'Juni',
+                            '07' => 'Juli',
+                            '08' => 'Agustus',
+                            '09' => 'September',
+                            '10' => 'Oktober',
+                            '11' => 'November',
+                            '12' => 'Desember'
+                        ];
+                        $bulan = $arr_bulan[$bulan_start];
+
+                        #cek tanggal
+                        if($tanggal_start == $tanggal_end){
+                            $date = $tanggal_start . ' ' . $bulan . ' ' . $tahun;
+                        } else {
+                            $date = $tanggal_start . ' - ' . $tanggal_end . ' ' . $bulan . ' ' . $tahun;
+                        }
+
+                    } else {
+                        $date = date('d M', strtotime($data->tgl_mulai)) . ' s/d ' . date('d M', strtotime($data->tgl_selesai)) . ' ' .  $tahun;
+                    }
+
+                } else {
+                    $date = date('d M Y', strtotime($data->tgl_mulai)) . ' s/d ' . date('d M Y', strtotime($data->tgl_sampai));
+                }
+
+                $waktu = $data->nama_jenis_proposal == 'Public Course' ? $date : $data->jumlah_hari;
+
+                
+                // $waktu = $data->nama_jenis_proposal == 'Public Course' ? date('d-m-Y', strtotime($data->tgl_mulai)) . ' s/d ' . date('d-m-Y', strtotime($data->tgl_selesai)) : $data->jumlah_hari;
 
                 $html_isi = '
                 <table width="100%" border="0" cellpadding="1" style="line-height:' . $line_height . ';">

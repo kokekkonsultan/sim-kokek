@@ -245,6 +245,7 @@ Route::get('select-filter/ajax_organisasi', [SelectFilterController::class, 'aja
 Route::get('select-filter/ajax_surat_ditujukan', [SelectFilterController::class, 'ajax_surat_ditujukan']);
 Route::get('select-filter/ajax_instansi', [SelectFilterController::class, 'ajax_instansi']);
 Route::get('select-filter/ajax_kota_kabupaten', [SelectFilterController::class, 'ajax_kota_kabupaten']);
+Route::get('select-filter/ajax_contact_person', [SelectFilterController::class, 'ajax_contact_person']);
 
 
 //LABEL SURAT SIRUP
@@ -291,6 +292,32 @@ Route::post('pic-wilayah-marketing/proses-add', [PicWilayahMarketingController::
 Route::get('pic-wilayah-marketing/form-add', [PicWilayahMarketingController::class, 'form_add']);
 Route::get('pic-wilayah-marketing/{id}', [PicWilayahMarketingController::class, 'index']);
 
+
 //DPB
+Route::get('dpb/export', [DpbController::class, 'export']);
 Route::get('dpb/{id}', [DpbController::class, 'index']);
 Route::get('dpb/detail/{id}', [DpbController::class, 'detail']);
+Route::get('dpb/form-add/{id}', [DpbController::class, 'form_add']);
+Route::get('dpb/cari-id-dil/{id}', [DpbController::class, 'cari_id_dil']);
+Route::post('dpb/proses-add/{id}', [DpbController::class, 'proses_add']);
+Route::get('dpb/form-next-add/{id}', [DpbController::class, 'form_next_add']);
+Route::post('dpb/proses-next-add/{id}', [DpbController::class, 'proses_next_add']);
+Route::get('dpb/form-edit/{id}', [DpbController::class, 'form_edit']);
+Route::post('dpb/proses-edit/{id}', [DpbController::class, 'proses_edit']);
+Route::post('dpb/delete-dpb/{id}', [DpbController::class, 'delete_dpb']);
+
+Route::post('dpb/add-termin/{id}', [DpbController::class, 'add_termin']);
+Route::post('dpb/delete-termin/{id}', [DpbController::class, 'delete_termin']);
+Route::post('dpb/add-tenaga-ahli/{id}', [DpbController::class, 'add_tenaga_ahli']);
+Route::post('dpb/edit-tenaga-ahli/{id}', [DpbController::class, 'edit_tenaga_ahli']);
+Route::post('dpb/delete-tenaga-ahli/{id}', [DpbController::class, 'delete_tenaga_ahli']);
+Route::post('dpb/add-objek-pekerjaan/{id}', [DpbController::class, 'add_objek_pekerjaan']);
+Route::post('dpb/edit-objek-pekerjaan/{id}', [DpbController::class, 'edit_objek_pekerjaan']);
+Route::post('dpb/delete-objek-pekerjaan/{id}', [DpbController::class, 'delete_objek_pekerjaan']);
+
+Route::get('dpb/modal_tanggal_terima_kontrak/{id}', [DpbController::class, 'modal_tanggal_terima_kontrak']);
+Route::post('dpb/edit_tanggal_terima_kontrak/{id}', [DpbController::class, 'edit_tanggal_terima_kontrak']);
+Route::get('dpb/modal_tanggal_terima_surat_referensi/{id}', [DpbController::class, 'modal_tanggal_terima_surat_referensi']);
+Route::post('dpb/edit_tanggal_terima_surat_referensi/{id}', [DpbController::class, 'edit_tanggal_terima_surat_referensi']);
+Route::get('dpb/modal_info_perubahan/{id}', [DpbController::class, 'modal_info_perubahan']);
+Route::post('dpb/publish/{id}', [DpbController::class, 'publish']);

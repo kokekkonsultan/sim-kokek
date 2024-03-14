@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Dpb extends Model
 {
-    protected $table = 'view_dpb_marketing';
+    protected $table = 'view_dpb';
     // protected $primaryKey = 'id_dpb';
 
 
