@@ -138,4 +138,23 @@ class SelectFilterController extends Controller
 
         return response()->json($formatted_tags);
     }
+
+    public function ajax_contact_person(Request $request)
+    {
+        $term = trim($request->q);
+        if (empty($term)) {
+            return response()->json([]);
+        }
+
+        $tags = DB::table('contact_person')
+        ->where('contact_person_name', 'LIKE', "%$term%")
+        ->get();
+        
+        $formatted_tags = [];
+        foreach ($tags as $tag) {
+            $formatted_tags[] = ['id' => $tag->id_contact_person, 'text' => $tag->contact_person_name . ' (' . $tag->occupation . ')'];
+        }
+
+        return response()->json($formatted_tags);
+    }
 }
