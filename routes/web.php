@@ -31,6 +31,7 @@ use App\Http\Controllers\LabelSuratSirupController;
 use App\Http\Controllers\MasterOrganisasiController;
 use App\Http\Controllers\PicWilayahMarketingController;
 use App\Http\Controllers\PengalamanPerusahaanController;
+use App\Http\Controllers\PermintaanKaryawanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,9 @@ Route::get('keuangan-omzet', [KeuanganOmzetController::class, 'index'])->name('k
 Route::post('keuangan-omzet', [KeuanganOmzetController::class, 'index'])->name('keuangan-omzet');
 Route::post('keuangan-omzet/validasi', [KeuanganOmzetController::class, 'validasi'])->name('omzet.validasi');
 Route::post('keuangan-omzet/proses-validasi', [KeuanganOmzetController::class, 'proses_validasi'])->name('omzet.proses.validasi');
+
+#ADUM
+Route::get('recruitment/permintaan-karyawan',[PermintaanKaryawanController::class,'index']);
 
 # MARKETING OMZET
 Route::get('marketing-omzet', [MarketingOmzetController::class, 'index'])->name('marketing-omzet');
