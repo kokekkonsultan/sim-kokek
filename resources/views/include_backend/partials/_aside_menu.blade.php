@@ -305,7 +305,7 @@ height:100px;">
             </li>
 
             @php
-            $menu_master = ['dpb', 'tidak-prospek', 'data_perusahaan', 'nomor_surat', 'cetak-proposal', 'tenaga_ahli',
+            $menu_master = ['dpb', 'fip-mkt', 'tidak-prospek', 'data_perusahaan', 'nomor_surat', 'cetak-proposal', 'tenaga_ahli',
             'pengalaman_tenaga_ahli', 'rup', 'prospek', 'daftar-penawaran', 'daftar_informasi_seleksi',
             'dokumen_penawaran', 'data_prakualifikasi', 'daftar_proyek_berjalan', 'pekerjaan_sedang_berjalan',
             'marketing-omzet', 'keuangan-omzet', 'formulir_informasi_pekerjaan', 'pengalaman_perusahaan',
@@ -545,12 +545,12 @@ height:100px;">
                         </li>
 
                         @php
-                        (Request::segment(1) == 'formulir_informasi_pekerjaan') ? $child_menu_active =
+                        (Request::segment(1) == 'fip-mkt') ? $child_menu_active =
                         'menu-item-active' :
                         $child_menu_active = '';
                         @endphp
                         <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
-                            <a href="/formulir_informasi_pekerjaan" class="menu-link">
+                            <a href="/fip-mkt/6" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                     <span></span>
                                 </i>
@@ -600,6 +600,193 @@ height:100px;">
                     </ul>
                 </div>
             </li>
+
+
+            @php
+            $menu_master = ['fip-direksi'];
+            $uri_selected = Request::segment(1);
+
+            $link_active = '';
+            if (in_array($uri_selected, $menu_master)) {
+
+            $main_menu_active = "menu-item-open menu-item-here";
+            $parent_menu_active = "menu-item-open menu-item-here";
+
+            } else {
+            $main_menu_active = "";
+            $parent_menu_active = "";
+            }
+            @endphp
+
+            <li class="menu-item menu-item-submenu {{ $main_menu_active }}" aria-haspopup="true" data-menu-toggle="hover">
+                <a href="javascript:;" class="menu-link menu-toggle">
+                    <span class="svg-icon menu-icon">
+                        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Bucket.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-text">Direksi</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="menu-submenu">
+                    <i class="menu-arrow"></i>
+                    <ul class="menu-subnav">
+                        <li class="menu-item menu-item-parent" aria-haspopup="true">
+                            <span class="menu-link">
+                                <span class="menu-text">Themes</span>
+                            </span>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'fip-direksi') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/fip-direksi/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Formulir Informasi Pekerjaan (FIP)</span>
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </li>
+            
+
+
+            @php
+            $menu_master = ['fip-mo'];
+            $uri_selected = Request::segment(1);
+
+            $link_active = '';
+            if (in_array($uri_selected, $menu_master)) {
+
+            $main_menu_active = "menu-item-open menu-item-here";
+            $parent_menu_active = "menu-item-open menu-item-here";
+
+            } else {
+            $main_menu_active = "";
+            $parent_menu_active = "";
+            }
+            @endphp
+
+            <li class="menu-item menu-item-submenu {{ $main_menu_active }}" aria-haspopup="true" data-menu-toggle="hover">
+                <a href="javascript:;" class="menu-link menu-toggle">
+                    <span class="svg-icon menu-icon">
+                        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Bucket.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-text">General Manager</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="menu-submenu">
+                    <i class="menu-arrow"></i>
+                    <ul class="menu-subnav">
+                        <li class="menu-item menu-item-parent" aria-haspopup="true">
+                            <span class="menu-link">
+                                <span class="menu-text">Themes</span>
+                            </span>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'fip-mo') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/fip-mo/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Formulir Informasi Pekerjaan (FIP)</span>
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </li>
+
+
+
+            @php
+            $menu_master = ['fip-adpro'];
+            $uri_selected = Request::segment(1);
+
+            $link_active = '';
+            if (in_array($uri_selected, $menu_master)) {
+
+            $main_menu_active = "menu-item-open menu-item-here";
+            $parent_menu_active = "menu-item-open menu-item-here";
+
+            } else {
+            $main_menu_active = "";
+            $parent_menu_active = "";
+            }
+            @endphp
+
+            <li class="menu-item menu-item-submenu {{ $main_menu_active }}" aria-haspopup="true" data-menu-toggle="hover">
+                <a href="javascript:;" class="menu-link menu-toggle">
+                    <span class="svg-icon menu-icon">
+                        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Bucket.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-text">Admin Proyek</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="menu-submenu">
+                    <i class="menu-arrow"></i>
+                    <ul class="menu-subnav">
+                        <li class="menu-item menu-item-parent" aria-haspopup="true">
+                            <span class="menu-link">
+                                <span class="menu-text">Themes</span>
+                            </span>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'fip-adpro') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/fip-adpro/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Formulir Informasi Pekerjaan (FIP)</span>
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </li>
+
+            
 
             @php
             $menu_master = ['keuangan-omzet'];
@@ -654,6 +841,82 @@ height:100px;">
                                 <span class="menu-text">Omzet</span>
                             </a>
                         </li>
+
+
+
+                    </ul>
+                </div>
+            </li>
+
+
+
+            @php
+            $menu_master = ['daily-report', 'weekly-planning'];
+            $uri_selected = Request::segment(1);
+
+            $link_active = '';
+            if (in_array($uri_selected, $menu_master)) {
+
+            $main_menu_active = "menu-item-open menu-item-here";
+            $parent_menu_active = "menu-item-open menu-item-here";
+
+            } else {
+            $main_menu_active = "";
+            $parent_menu_active = "";
+            }
+            @endphp
+
+            <li class="menu-item menu-item-submenu {{ $main_menu_active }}" aria-haspopup="true" data-menu-toggle="hover">
+                <a href="javascript:;" class="menu-link menu-toggle">
+                    <span class="svg-icon menu-icon">
+                        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Bucket.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-text">Report & Planning</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="menu-submenu">
+                    <i class="menu-arrow"></i>
+                    <ul class="menu-subnav">
+                        <li class="menu-item menu-item-parent" aria-haspopup="true">
+                            <span class="menu-link">
+                                <span class="menu-text">Themes</span>
+                            </span>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'daily-report') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/daily-report/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Daily Report</span>
+                            </a>
+                        </li>
+
+                        @php
+                        (Request::segment(1) == 'weekly-planning') ? $child_menu_active = 'menu-item-active' :
+                        $child_menu_active = '';
+                        @endphp
+                        <li class="menu-item {{ $child_menu_active }}" aria-haspopup="true">
+                            <a href="/weekly-planning/6" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Weekly Planning</span>
+                            </a>
+                        </li>
+                        
 
 
 

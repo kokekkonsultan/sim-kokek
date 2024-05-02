@@ -201,6 +201,20 @@ class ProspekController extends Controller
         );
         DB::table('rencana_umum_pengadaan')->where('id_rup', $request->segment(3))->update($object);
 
+
+         #Tambah Log User ==========================================
+         $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_branch_agency'  => $request['id_branch_agency'],
+            'id_rup'            => $request->segment(3),
+            'aktivitas'         => 'Mengubah Rencana Umum Pengadaan (RUP)',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
+         
+
         Alert::success('Success', 'Berhasil Mengubah Data');
         return redirect('prospek/' . Session::get('id_users'));
     }
@@ -234,6 +248,19 @@ class ProspekController extends Controller
         );
         DB::table('import_rencana_umum_pengadaan')->where('id_rup', $request->segment(3))->update($object);
 
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_rup'        => $request->segment(3),
+            'aktivitas'     => 'Mengubah Rencana Umum Pengadaan (RUP)',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
+
+
         Alert::success('Success', 'Berhasil Mengubah Data');
         return redirect('prospek/' . Session::get('id_users'));
     }
@@ -241,7 +268,6 @@ class ProspekController extends Controller
 
     public function delete_data($id)
     {
-
         if (DB::table('import_rencana_umum_pengadaan')->where('id_rup', $id)->count() > 0) {
             DB::table('import_rencana_umum_pengadaan')->where('id_rup', $id)->delete();
         } else {
@@ -356,8 +382,19 @@ class ProspekController extends Controller
         ];
         DB::table("surat_sirup")->insert($object);
 
-        // Alert::success('Success', 'Berhasil Membuat Surat');
-        // return redirect('prospek/form-surat/' . $request->segment(3));
+
+
+         #Tambah Log User ==========================================
+         $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_rup'            => $request->segment(3),
+            'aktivitas'         => 'Mencetak Surat SIRUP',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
+
         echo json_encode(array("status" => true));
         
     }

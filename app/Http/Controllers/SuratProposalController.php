@@ -154,8 +154,20 @@ class SuratProposalController extends Controller
             $object['nama_kegiatan']        = $get_produk->nama_master_proposal;
             $object['bagian_tubuh_surat']   = $request['bagian_tubuh_surat'];
         }
-
         DB::table("proposal_template")->insert($object);
+        $id_proposal_template = DB::getPdo()->lastInsertId();
+
+
+
+         #Tambah Log User ==========================================
+         $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_proposal_template'  => $id_proposal_template,
+            'aktivitas'         => 'Membuat template surat proposal',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
 
         Alert::success('Success', 'Berhasil Menambah Data');
         return redirect('surat-proposal/' . Session::get('id_users'));
@@ -232,6 +244,20 @@ class SuratProposalController extends Controller
 
         DB::table('proposal_template')->where('id', $request->segment(3))->update($object);
 
+
+
+         #Tambah Log User ==========================================
+         $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_proposal_template'  => $request->segment(3),
+            'aktivitas'             => 'Mengubah template surat proposal',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
+
         Alert::success('Success', 'Berhasil Mengubah Data');
         return redirect('surat-proposal/' . Session::get('id_users'));
     }
@@ -239,6 +265,17 @@ class SuratProposalController extends Controller
 
     public function delete_data($id)
     {
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_proposal_template'  => $id,
+            'aktivitas'             => 'Menghapus template surat proposal',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
         DB::table('proposal_template')->where('id', $id)->delete();
 
         echo json_encode(array("status" => true));

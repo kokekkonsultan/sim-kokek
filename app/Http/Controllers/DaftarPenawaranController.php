@@ -246,6 +246,17 @@ class DaftarPenawaranController extends Controller
         DB::table("hasil_lelang")->insert($value);
 
 
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dil'            => $insert_id,
+            'aktivitas'         => 'Menambah Daftar Penawaran',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
         Alert::success('Success', 'Berhasil Menambah Data DIL');
         return redirect('daftar-penawaran/' . Session::get('id_users'));
     }
@@ -317,6 +328,20 @@ class DaftarPenawaranController extends Controller
         DB::table("hasil_lelang")->insert($value);
 
 
+
+        #Tambah Log User ==========================================
+         $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_branch_agency'  => $request['id_branch_agency'],
+            'id_rup'            => $id_rup,
+            'id_dil'            => $insert_id,
+            'aktivitas'         => 'Menambah Rencana Umum Pengadaan (RUP) dan Daftar Penawaran',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
         Alert::success('Success', 'Berhasil Menambah Data DIL');
         return redirect('daftar-penawaran/' . Session::get('id_users'));
     }
@@ -379,6 +404,18 @@ class DaftarPenawaranController extends Controller
             'id_pokja'                      => $request['pokja']
         ];
         DB::table('daftar_informasi_lelang')->where('id_dil', $dil->id_dil)->update($object_dil);
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dil'            => $dil->id_dil,
+            'aktivitas'         => 'Mengubah Daftar Penawaran',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+        
 
         Alert::success('Success', 'Berhasil Mengubah Data DIL');
         return redirect('daftar-penawaran/' . Session::get('id_users'));
@@ -488,6 +525,20 @@ class DaftarPenawaranController extends Controller
         // var_dump($object);
         DB::table('hasil_lelang')->where('id_dil', $request->segment(3))->update($object);
 
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dil'            => $request->segment(3),
+            'aktivitas'         => 'Mengubah Hasil Lelang',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
+
         Alert::success('Success', 'Berhasil Mengubah Hasil Lelang');
         return redirect('daftar-penawaran/form-hasil-lelang/' . $request->segment(3));
     }
@@ -526,6 +577,17 @@ class DaftarPenawaranController extends Controller
                 ->to('programmer@kokek.com')
                 ->subject('Hasil Lelang ' . $dil->nama_pekerjaan);
         });
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dil'            => $dil->id_dil,
+            'aktivitas'         => 'Mempublish Hasil Lelang',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
 
         // ->to('programmer@kokek.com')->cc('lefi.andri@kokek.com')
 
@@ -634,6 +696,18 @@ class DaftarPenawaranController extends Controller
                 ->to('programmer@kokek.com')
                 ->subject('Aanwizing ' . $dil->nama_pekerjaan);
         });
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dil'            => $id_dil,
+            'aktivitas'         => 'Mempublish Aanwizing',
+            'created_at'        => now()
+        ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+        
 
         return response()->json();
 
