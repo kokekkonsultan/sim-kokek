@@ -256,11 +256,26 @@ class DpbController extends Controller
         DB::table("daftar_proyek_berjalan")->insert($object);
         $id_dpb = DB::getPdo()->lastInsertId();
 
-
         $result = [
             'id_dpb' => $id_dpb
         ];
         DB::table("dpb_biaya")->insert($result);
+
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_dpb'            => $id_dpb,
+            'aktivitas'         => 'Menambah Daftar Proyek Berjalan (DPB)',
+            'created_at'        => now()
+        ];
+        if($id != 1){
+            $log['id_branch_agency']         = $request['id_pemberi_kerja'];
+        }
+
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
 
 
         return redirect('dpb/form-next-add/' . $id_dpb);
@@ -274,7 +289,7 @@ class DpbController extends Controller
         $this->data = [];
         $this->data['id'] = $id;
         $this->data['title'] = "Tambah Daftar Proyek Berjalan";
-        $this->data['dpb'] = DB::table('data_dil_marketing')->where('id_dil', $id)->first();
+        $this->data['dpb'] = collect(DB::select("SELECT * FROM view_dpb WHERE id_dpb = $id"))->first();
 
 
         return view('dpb.form_next_add', $this->data);
@@ -357,8 +372,24 @@ class DpbController extends Controller
         DB::table("data_perubahan_dpb")->insert($result);
 
 
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'          => Session::get('id_users'),
+            'id_dpb'            => $id,
+            'aktivitas'         => 'Mengubah Daftar Proyek Berjalan (DPB)',
+            'created_at'        => now()
+        ];
+        if ($dpb->jenis_pekerjaan_dpb != 'Lelang') {
+            $log['id_branch_agency']         = $request['id_pemberi_kerja'];
+        }
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
+
         return redirect('dpb/' . Session::get('id_users'));
     }
+
 
     public function delete_dpb($id)
     {
@@ -371,9 +402,6 @@ class DpbController extends Controller
 
         echo json_encode(array("status" => true));
     }
-
-
-
 
 
     public function add_termin(Request $request, $id)

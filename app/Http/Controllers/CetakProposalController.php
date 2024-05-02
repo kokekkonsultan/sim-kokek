@@ -269,8 +269,19 @@ class CetakProposalController extends Controller
                 'id_surat_ditujukan'        => $arr_surat_ditujukan[$key]
             ];
             DB::table("nomor_surat")->insert($result[$key]);
-        }
 
+
+            #Tambah Log User ==========================================
+            $log[$key] = [
+                'id_user'               => Session::get('id_users'),
+                'id_branch_agency'      => $row,
+                'id_surat_proposal'     => $id_surat_proposal,
+                'aktivitas'             => 'Mencetak Surat Proposal',
+                'created_at'           => now()
+            ];
+            DB::table("log_aktivitas_user")->insert($log[$key]);
+            #End Tambah Log User =======================================
+        }
 
         $object_update = [
             'collect_kode_surat' => serialize($kode_surat_arr)
@@ -285,6 +296,17 @@ class CetakProposalController extends Controller
 
     public function delete_data($id)
     {
+        #Tambah Log User ==========================================
+        $log = [
+            'id_user'               => Session::get('id_users'),
+            'id_surat_proposal'     => $id,
+            'aktivitas'             => 'Menghapus Cetak Surat Proposal',
+            'created_at'           => now()
+        ];
+        DB::table("log_aktivitas_user")->insert($log);
+        #End Tambah Log User =======================================
+
+
         DB::table('surat_proposal')->where('id', $id)->delete();
         echo json_encode(array("status" => true));
     }

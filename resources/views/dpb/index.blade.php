@@ -15,8 +15,7 @@
                     <h4 class="text-primary font-weight-bolder">{{strtoupper($title)}}</h4>
                 </div>
                 <div class="col-6 text-right">
-                    <a data-toggle="modal" data-target="#export" class="btn btn-light-success font-weight-bolder mr-2"><i class="fa fa-file-excel"></i> Export
-                        Excel</a>
+                    <a data-toggle="modal" data-target="#export" class="btn btn-light-success font-weight-bolder mr-2"><i class="fa fa-file-excel"></i> Export Excel</a>
 
                     <a type="button" class="btn btn-light-info font-weight-bold mr-2" data-toggle="collapse" href="#filter"><i class="fa fa-filter"></i>Filter Data</a>
 

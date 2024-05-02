@@ -7,11 +7,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DpbController;
 use App\Http\Controllers\RupController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FipMoController;
+use App\Http\Controllers\FipMktController;
 use App\Http\Controllers\ProspekController;
+use App\Http\Controllers\FipAdproController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SendEmailController;
+use App\Http\Controllers\FipDireksiController;
 use App\Http\Controllers\LabelSuratController;
 use App\Http\Controllers\MasterUnitController;
+use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\SelectFilterController;
 use App\Http\Controllers\TidakProspekController;
 use App\Http\Controllers\CetakProposalController;
@@ -20,11 +25,12 @@ use App\Http\Controllers\KeuanganOmzetController;
 use App\Http\Controllers\SuratProposalController;
 use App\Http\Controllers\MarketingOmzetController;
 use App\Http\Controllers\MasterProposalController;
+use App\Http\Controllers\WeeklyPlanningController;
 use App\Http\Controllers\DaftarPenawaranController;
 use App\Http\Controllers\LabelSuratSirupController;
 use App\Http\Controllers\MasterOrganisasiController;
-use App\Http\Controllers\PengalamanPerusahaanController;
 use App\Http\Controllers\PicWilayahMarketingController;
+use App\Http\Controllers\PengalamanPerusahaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,18 +132,18 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/send-email', [SendEmailController::class, 'index'])->name('kirim-email');
 Route::get('/post-email', [SendEmailController::class, 'store'])->name('post-email');
 
-// PENGALAMAN PERUSAHAAN
+# PENGALAMAN PERUSAHAAN
 Route::get('pengalaman-perusahaan', [PengalamanPerusahaanController::class, 'index'])->name('pengalaman.perusahaan');
 Route::post('pengalaman-perusahaan', [PengalamanPerusahaanController::class, 'index']);
 Route::post('pengalaman-perusahaan/generate-chart', [PengalamanPerusahaanController::class, 'generate_chart']);
 
-// KEUANGAN OMZET
+# KEUANGAN OMZET
 Route::get('keuangan-omzet', [KeuanganOmzetController::class, 'index'])->name('keuangan-omzet');
 Route::post('keuangan-omzet', [KeuanganOmzetController::class, 'index'])->name('keuangan-omzet');
 Route::post('keuangan-omzet/validasi', [KeuanganOmzetController::class, 'validasi'])->name('omzet.validasi');
 Route::post('keuangan-omzet/proses-validasi', [KeuanganOmzetController::class, 'proses_validasi'])->name('omzet.proses.validasi');
 
-// MARKETING OMZET
+# MARKETING OMZET
 Route::get('marketing-omzet', [MarketingOmzetController::class, 'index'])->name('marketing-omzet');
 Route::post('marketing-omzet', [MarketingOmzetController::class, 'index'])->name('marketing-omzet');
 Route::get('marketing-omzet/get-nilai-pekerjaan', [MarketingOmzetController::class, 'get_nilai_pekerjaan']);
@@ -145,7 +151,7 @@ Route::get('marketing-omzet/get-jumlah-pekerjaan', [MarketingOmzetController::cl
 Route::post('marketing-omzet/generate-chart', [MarketingOmzetController::class, 'generate_chart']);
 
 
-//RUP
+#RUP
 // Route::get('rup', [RupController::class, 'index'])->name('rup.index');
 Route::get('rup/{id}', [RupController::class, 'index']);
 Route::get('rup/form-import/{id}', [RupController::class, 'form_import']);
@@ -163,7 +169,7 @@ Route::get('rup/form-edit-import/{id}', [RupController::class, 'form_edit_import
 Route::post('rup/proses-edit-import/{id}', [RupController::class, 'proses_edit_import']);
 Route::get('rup/export/excel/{id}', [RupController::class, 'proses_export_excel']);
 
-//PROSPEK
+#PROSPEK
 Route::get('prospek/{id}', [ProspekController::class, 'index']);
 Route::post('prospek/ubah-ke-tidak-prospek/{id}', [ProspekController::class, 'ubah_ke_tidak_prospek']);
 Route::post('prospek/delete-data/{id}', [ProspekController::class, 'delete_data']);
@@ -178,13 +184,13 @@ Route::get('prospek/pdf/{id}', [ProspekController::class, 'pdf']);
 Route::post('prospek/jadikan-daftar-penawaran/{id}', [ProspekController::class, 'jadikan_daftar_penawaran']);
 
 
-//TIDAK PROSPEK
+#TIDAK PROSPEK
 Route::get('tidak-prospek/{id}', [TidakProspekController::class, 'index']);
 Route::post('tidak-prospek/ubah-ke-rup/{id}', [TidakProspekController::class, 'ubah_ke_rup']);
 Route::post('tidak-prospek/ubah-ke-prospek/{id}', [TidakProspekController::class, 'ubah_ke_prospek']);
 
 
-//DAFTAR PENAWARAN
+#DAFTAR PENAWARAN
 Route::get('daftar-penawaran/form-add-dengan-rup', [DaftarPenawaranController::class, 'form_add_dengan_rup']);
 Route::post('daftar-penawaran/add-dengan-rup', [DaftarPenawaranController::class, 'add_dengan_rup']);
 Route::get('daftar-penawaran/form-add-tanpa-rup', [DaftarPenawaranController::class, 'form_add_tanpa_rup']);
@@ -207,7 +213,7 @@ Route::get('daftar-penawaran/form-sanggahan/{id}', [DaftarPenawaranController::c
 
 
 
-//SURAT PROPOSAL
+#SURAT PROPOSAL
 Route::get('surat-proposal/{id}', [SuratProposalController::class, 'index']);
 Route::get('surat-proposal/form-add/{id}', [SuratProposalController::class, 'form_add']);
 Route::post('surat-proposal/proses-add/{id}', [SuratProposalController::class, 'proses_add']);
@@ -218,14 +224,14 @@ Route::get('surat-proposal/pdf/{id}/{pt}', [SuratProposalController::class, 'pdf
 Route::get('surat-proposal/form-add/{id}/{id1}', [SuratProposalController::class, 'form_add']);
 
 
-//MASTER PROPOSAL
+#MASTER PROPOSAL
 Route::post('master-proposal/add', [MasterProposalController::class, 'add']);
 Route::post('master-proposal/edit', [MasterProposalController::class, 'edit']);
 Route::get('master-proposal/{id}', [MasterProposalController::class, 'index']);
 Route::post('master-proposal/delete-data/{id}', [MasterProposalController::class, 'delete_data']);
 
 
-//CETAK PROPOSAL
+#CETAK PROPOSAL
 Route::get('cetak-proposal/ajax_agency_category', [CetakProposalController::class, 'ajax_agency_category']);
 Route::get('cetak-proposal/ajax_agency', [CetakProposalController::class, 'ajax_agency']);
 Route::get('cetak-proposal/ajax_organisasi', [CetakProposalController::class, 'ajax_organisasi']);
@@ -238,7 +244,7 @@ Route::post('cetak-proposal/delete-data/{id}', [CetakProposalController::class, 
 Route::get('cetak-proposal/pdf/{id}/{pt}', [CetakProposalController::class, 'pdf']);
 
 
-//SELECT FILTER
+#SELECT FILTER
 Route::get('select-filter/ajax_agency_category', [SelectFilterController::class, 'ajax_agency_category']);
 Route::get('select-filter/ajax_agency', [SelectFilterController::class, 'ajax_agency']);
 Route::get('select-filter/ajax_organisasi', [SelectFilterController::class, 'ajax_organisasi']);
@@ -248,12 +254,12 @@ Route::get('select-filter/ajax_kota_kabupaten', [SelectFilterController::class, 
 Route::get('select-filter/ajax_contact_person', [SelectFilterController::class, 'ajax_contact_person']);
 
 
-//LABEL SURAT SIRUP
+#LABEL SURAT SIRUP
 Route::get('label-surat-sirup', [LabelSuratSirupController::class, 'index']);
 Route::post('label-surat-sirup/buat-label', [LabelSuratSirupController::class, 'buat_label']);
 
 
-//MASTER ORGANISASI
+#MASTER ORGANISASI
 Route::get('master-organisasi/form-label-pengirim', [MasterOrganisasiController::class, 'form_label_pengirim']);
 Route::get('master-organisasi/proses-label-pengirim', [MasterOrganisasiController::class, 'proses_label_pengirim']);
 Route::get('master-organisasi/form-add', [MasterOrganisasiController::class, 'form_add']);
@@ -264,13 +270,14 @@ Route::post('master-organisasi/proses-edit/{id}', [MasterOrganisasiController::c
 Route::post('master-organisasi/proses-add-surat-ditujukan/{id}', [MasterOrganisasiController::class, 'proses_add_surat_ditujukan']);
 Route::post('master-organisasi/delete-surat-kepada/{id}', [MasterOrganisasiController::class, 'delete_surat_kepada']);
 Route::post('master-organisasi/delete-organisasi/{id}', [MasterOrganisasiController::class, 'delete_organisasi']);
+Route::get('master-organisasi/log-aktivitas/{id}', [MasterOrganisasiController::class, 'log_aktivitas']);
 
 
-//LABEL SURAT ORGANISASI
+#LABEL SURAT ORGANISASI
 Route::get('label-surat', [LabelSuratController::class, 'index']);
 Route::post('label-surat/buat-label', [LabelSuratController::class, 'buat_label']);
 
-//MASTER UNIT
+#MASTER UNIT
 Route::get('master-unit/form-add', [MasterUnitController::class, 'form_add']);
 Route::post('master-unit/proses-add', [MasterUnitController::class, 'proses_add']);
 Route::get('master-unit/{id}', [MasterUnitController::class, 'index']);
@@ -281,7 +288,7 @@ Route::post('master-unit/delete-surat-kepada/{id}', [MasterUnitController::class
 Route::post('master-unit/delete-organisasi/{id}', [MasterUnitController::class, 'delete_organisasi']);
 
 
-//PIC WILAYAH MARKETING
+#PIC WILAYAH MARKETING
 Route::post('pic-wilayah-marketing/delete-wilayah/{id}', [PicWilayahMarketingController::class, 'delete_wilayah']);
 Route::post('pic-wilayah-marketing/edit-wilayah/{id}', [PicWilayahMarketingController::class, 'edit_wilayah']);
 Route::post('pic-wilayah-marketing/add-wilayah/{id}', [PicWilayahMarketingController::class, 'add_wilayah']);
@@ -293,7 +300,7 @@ Route::get('pic-wilayah-marketing/form-add', [PicWilayahMarketingController::cla
 Route::get('pic-wilayah-marketing/{id}', [PicWilayahMarketingController::class, 'index']);
 
 
-//DPB
+#DPB
 Route::get('dpb/export', [DpbController::class, 'export']);
 Route::get('dpb/{id}', [DpbController::class, 'index']);
 Route::get('dpb/detail/{id}', [DpbController::class, 'detail']);
@@ -321,3 +328,84 @@ Route::get('dpb/modal_tanggal_terima_surat_referensi/{id}', [DpbController::clas
 Route::post('dpb/edit_tanggal_terima_surat_referensi/{id}', [DpbController::class, 'edit_tanggal_terima_surat_referensi']);
 Route::get('dpb/modal_info_perubahan/{id}', [DpbController::class, 'modal_info_perubahan']);
 Route::post('dpb/publish/{id}', [DpbController::class, 'publish']);
+
+
+#FIP MARKETING
+Route::get('fip-mkt/export', [FipMktController::class, 'export']);
+
+Route::post('fip-mkt/add-tanggapan', [FipMktController::class, 'add_tanggapan']);
+Route::post('fip-mkt/delete-tanggapan/{id}', [FipMktController::class, 'delete_tanggapan']);
+
+Route::post('fip-mkt/add-catatan', [FipMktController::class, 'add_catatan']);
+Route::get('fip-mkt/modal-edit-catatan/{id}', [FipMktController::class, 'modal_edit_catatan']);
+Route::post('fip-mkt/edit-catatan/{id}', [FipMktController::class, 'edit_catatan']);
+Route::post('fip-mkt/delete-catatan/{id}', [FipMktController::class, 'delete_catatan']);
+
+Route::post('fip-mkt/add-biaya', [FipMktController::class, 'add_biaya']);
+Route::get('fip-mkt/modal-edit-biaya/{id}', [FipMktController::class, 'modal_edit_biaya']);
+Route::post('fip-mkt/edit-biaya/{id}', [FipMktController::class, 'edit_biaya']);
+Route::post('fip-mkt/delete-biaya/{id}', [FipMktController::class, 'delete_biaya']);
+
+Route::post('fip-mkt/proses-add', [FipMktController::class, 'proses_add']);
+Route::get('fip-mkt/form-add', [FipMktController::class, 'form_add']);
+Route::get('fip-mkt/{id}', [FipMktController::class, 'index']);
+Route::get('fip-mkt/cari-id-dpb/{id}', [FipMktController::class, 'cari_id_dpb']);
+Route::get('fip-mkt/form-edit/{id}', [FipMktController::class, 'form_edit']);
+Route::post('fip-mkt/proses-edit/{id}', [FipMktController::class, 'proses_edit']);
+Route::post('fip-mkt/delete-data/{id}', [FipMktController::class, 'delete_data']);
+Route::get('fip-mkt/form-next-edit/{id}', [FipMktController::class, 'form_next_edit']);
+Route::get('fip-mkt/detail/{id}', [FipMktController::class, 'detail']);
+Route::post('fip-mkt/publish/{id}', [FipMktController::class, 'publish']);
+
+Route::get('fip-mkt/modal-tanggal-bast/{id}', [FipMktController::class, 'modal_tanggal_bast']);
+Route::post('fip-mkt/ubah-tanggal-bast/{id}', [FipMktController::class, 'ubah_tanggal_bast']);
+
+
+#FIP MO
+Route::get('fip-mo/export', [FipMoController::class, 'export']);
+Route::post('fip-mo/add-catatan', [FipMoController::class, 'add_catatan']);
+Route::get('fip-mo/{id}', [FipMoController::class, 'index']);
+Route::get('fip-mo/modal-tunjuk-pic/{id}', [FipMoController::class, 'modal_tunjuk_pic']);
+Route::post('fip-mo/tunjuk-pic/{id}', [FipMoController::class, 'tunjuk_pic']);
+Route::get('fip-mo/approved/{id}', [FipMoController::class, 'approved']);
+Route::get('fip-mo/catatan/{id}', [FipMoController::class, 'catatan']);
+Route::post('fip-mo/edit-catatan/{id}', [FipMoController::class, 'edit_catatan']);
+Route::post('fip-mo/delete-catatan/{id}', [FipMoController::class, 'delete_catatan']);
+
+
+#FIP ADPRO
+Route::get('fip-adpro/export', [FipAdproController::class, 'export']);
+Route::post('fip-adpro/add-catatan', [FipAdproController::class, 'add_catatan']);
+Route::get('fip-adpro/{id}', [FipAdproController::class, 'index']);
+Route::get('fip-adpro/modal-tunjuk-pic/{id}', [FipAdproController::class, 'modal_tunjuk_pic']);
+Route::post('fip-adpro/tunjuk-pic/{id}', [FipAdproController::class, 'tunjuk_pic']);
+Route::get('fip-adpro/catatan/{id}', [FipAdproController::class, 'catatan']);
+Route::post('fip-adpro/edit-catatan/{id}', [FipAdproController::class, 'edit_catatan']);
+Route::post('fip-adpro/delete-catatan/{id}', [FipAdproController::class, 'delete_catatan']);
+
+
+#FIP DIREKSI
+Route::get('fip-direksi/export', [FipDireksiController::class, 'export']);
+Route::post('fip-direksi/add-catatan', [FipDireksiController::class, 'add_catatan']);
+Route::get('fip-direksi/{id}', [FipDireksiController::class, 'index']);
+Route::get('fip-direksi/modal-tunjuk-pic/{id}', [FipDireksiController::class, 'modal_tunjuk_pic']);
+Route::post('fip-direksi/tunjuk-pic/{id}', [FipDireksiController::class, 'tunjuk_pic']);
+Route::get('fip-direksi/approved/{id}', [FipDireksiController::class, 'approved']);
+Route::get('fip-direksi/catatan/{id}', [FipDireksiController::class, 'catatan']);
+Route::post('fip-direksi/edit-catatan/{id}', [FipDireksiController::class, 'edit_catatan']);
+Route::post('fip-direksi/delete-catatan/{id}', [FipDireksiController::class, 'delete_catatan']);
+
+
+
+#DAILY REPORT
+Route::post('daily-report/add', [DailyReportController::class, 'add']);
+Route::post('daily-report/add_tindak_lanjut', [DailyReportController::class, 'add_tindak_lanjut']);
+Route::get('daily-report/{id}', [DailyReportController::class, 'index']);
+Route::get('daily-report/show_modal_tindak_lanjut/{id}', [DailyReportController::class, 'show_modal_tindak_lanjut']);
+Route::get('daily-report/show_modal_edit/{id}', [DailyReportController::class, 'show_modal_edit']);
+Route::post('daily-report/edit/{id}', [DailyReportController::class, 'edit']);
+Route::post('daily-report/delete/{id}', [DailyReportController::class, 'delete']);
+
+
+#Weekly PLANNING
+Route::get('weekly-planning/{id}', [WeeklyPlanningController::class, 'index']);

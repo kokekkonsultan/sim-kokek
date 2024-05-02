@@ -289,15 +289,16 @@ class RupController extends Controller
                 // cek jika id sudah ada tidak perlu masuk variabel result
                 if (DB::table("import_rencana_umum_pengadaan")->where('id_sis_rup', $row['L'])->count() == 0) {
 
-                    $pecah = explode(" ", $row['H']);
-                    $jumlah_pecah = count($pecah);
-                    if ($jumlah_pecah > 1) {
-                        $tahun_anggaran = $pecah[1];
-                    } else {
-                        $pecah = explode("-", $row['H']);
-                        $tahun_anggaran = $pecah[1];
-                    }
+                    // $pecah = explode(" ", $row['H']);
+                    // $jumlah_pecah = count($pecah);
+                    // if ($jumlah_pecah > 1) {
+                    //     $tahun_anggaran = $pecah[1];
+                    // } else {
+                    //     $pecah = explode("-", $row['H']);
+                    //     $tahun_anggaran = $pecah[1];
+                    // }
 
+                    $tahun_anggaran = date('Y');
                     $object[] = '';
                     $result = [
                         'id_rup'                    => Str::uuid(),
@@ -347,8 +348,9 @@ class RupController extends Controller
     public function proses_add(Request $request)
     {
         $this->data = [];
+        $id_rup = Str::uuid();
         $object = array(
-            'id_rup'                => Str::uuid(),
+            'id_rup'                => $id_rup,
             'id_sis_rup'            => $request['id_sis_rup'],
             'is_sirup'              => 1,
             'id_jenis_produk_rup'    => $request['id_jenis_produk_rup'],
@@ -365,9 +367,22 @@ class RupController extends Controller
             'lokasi_pekerjaan'      => $request['lokasi_pekerjaan'],
             'is_import'             => '0',
             'created_at'            => now(),
-            'input_id'              => $request->segment(3),
+            'input_id'              => Session::get('id_users'),
         );
         DB::table("rencana_umum_pengadaan")->insert($object);
+
+
+        #Tambah Log User ==========================================
+        $log = [
+                'input_id'           => Session::get('id_users'),
+                'id_branch_agency'  => $request['id_branch_agency'],
+                'id_rup'            => $id_rup,
+                'aktivitas'         => 'Menambah Rencana Umum Pengadaan (RUP)',
+                'created_at'           => now()
+            ];
+        DB::table("daily_report")->insert($log);
+        #End Tambah Log User =======================================
+
 
         Alert::success('Success', 'Berhasil Menambah Data');
         return redirect('rup/' . $request->segment(3));
@@ -420,6 +435,19 @@ class RupController extends Controller
         );
         DB::table('rencana_umum_pengadaan')->where('id_rup', $request->segment(3))->update($object);
 
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_branch_agency'  => $request['id_branch_agency'],
+            'id_rup'            => $request->segment(3),
+            'aktivitas'         => 'Mengubah Rencana Umum Pengadaan (RUP)',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
+
         Alert::success('Success', 'Berhasil Mengubah Data');
         return redirect('rup/' . Session::get('id_users'));
     }
@@ -453,6 +481,18 @@ class RupController extends Controller
         );
         DB::table('import_rencana_umum_pengadaan')->where('id_rup', $request->segment(3))->update($object);
 
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_rup'        => $request->segment(3),
+            'aktivitas'     => 'Mengubah Rencana Umum Pengadaan (RUP)',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+         
+
         Alert::success('Success', 'Berhasil Mengubah Data');
         return redirect('rup/' . Session::get('id_users'));
     }
@@ -474,6 +514,20 @@ class RupController extends Controller
                 ->update(['is_pekerjaan_prospek' => 2, 'updated_at' => now()]);
         }
 
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_rup'        => $id,
+            'aktivitas'     => 'Mengubah Status Rencana Umum Pengadaan (RUP) ke Prospek',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
+        
+
         echo json_encode(array("status" => true));
     }
 
@@ -493,6 +547,18 @@ class RupController extends Controller
                 ->where('id_rup', $id)
                 ->update(['is_pekerjaan_prospek' => 1, 'updated_at' => now()]);
         }
+
+
+        #Tambah Log User ==========================================
+        $log = [
+            'input_id'           => Session::get('id_users'),
+            'id_rup'        => $id,
+            'aktivitas'     => 'Mengubah Status Rencana Umum Pengadaan (RUP) ke Tidak Prospek',
+            'created_at'           => now()
+        ];
+        DB::table("daily_report")->insert($log);
+         #End Tambah Log User =======================================
+
 
         echo json_encode(array("status" => true));
     }

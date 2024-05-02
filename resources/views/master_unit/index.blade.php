@@ -112,12 +112,12 @@
                 <table class="table table-hover table-bordered" id="table">
                     <thead class="bg-secondary">
                         <tr>
-                            <th width="4%">No</th>
+                            <th>No</th>
+                            <th></th>
                             <th>Nama Unit</th>
-                            <th width="35%">Nama Organisasi</th>
+                            <th>Nama Organisasi</th>
                             <th>Email</th>
                             <th></th>
-                            <th width="16%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,6 +168,9 @@
                     orderable: false,
                     searchable: false
                 }, {
+                    data: 'btn_kop',
+                    name: 'btn_kop'
+                }, {
                     data: 'nama_organisasi',
                     name: 'nama_organisasi'
                 }, {
@@ -176,9 +179,6 @@
                 }, {
                     data: 'email',
                     name: 'email'
-                }, {
-                    data: 'btn_kop',
-                    name: 'btn_kop'
                 }, {
                     data: 'btn_action',
                     name: 'btn_action'
